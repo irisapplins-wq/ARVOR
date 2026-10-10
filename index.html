@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="ARVOR — Les Terres d’Armorique, jeu de stratégie multijoueur persistant.">
   <title>ARVOR — Les Terres d’Armorique</title>
-  <link rel="stylesheet" href="css/style.css?v=quest-framework-20261010">
+  <link rel="stylesheet" href="css/style.css?v=potion-market-20261010">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
   <script src="js/supabase.js" defer></script>
   <script src="js/messaging.js?v=mail-attachment-reading-20261010" defer></script>
@@ -15,13 +15,14 @@
   <script src="js/inventory.js?v=quest-catalog-20261010" defer></script>
   <script src="js/potion-rewards.js?v=expedition-potions-20261010" defer></script>
   <script src="js/quests.js?v=quest-rewards-20261010" defer></script>
-  <script src="js/market.js?v=market-hall-20261008" defer></script>
+  <script src="js/market.js?v=potion-market-20261010" defer></script>
+  <script src="js/potion-market.js?v=potion-market-20261010" defer></script>
   <script src="js/raid-departure.js?v=pvp-phase10-20261010" defer></script>
   <script src="js/raids.js?v=pvp-phase10-20261010" defer></script>
   <script src="js/world-grid-diagnostic.js?v=world-grid-20261008" defer></script>
   <script src="js/domain-solar.js?v=royaume-vivant-20261010" defer></script>
   <script src="js/domain-ambience.js?v=royaume-vivant-20261010" defer></script>
-  <script src="js/app.js?v=expedition-potions-20261010" defer></script>
+  <script src="js/app.js?v=potion-market-20261010" defer></script>
 </head>
 <body>
   <main class="welcome">
@@ -374,6 +375,8 @@
     </header>
     <div class="market-content">
     <p class="market-introduction">Sous les poutres de la halle, les richesses d’Armorique changent de mains.</p>
+    <nav class="market-tabs" aria-label="Catégories du marché"><button type="button" data-market-category="resources" aria-pressed="true">Ressources</button><button type="button" data-market-category="potions" aria-pressed="false">Potions</button></nav>
+    <div id="market-resources-content">
     <p id="market-message" class="message" role="status" aria-live="polite"></p>
     <button id="market-retry" type="button" hidden>Vérifier la transaction en attente</button>
     <div class="market-tabs" role="group" aria-label="Sections du marché">
@@ -409,11 +412,27 @@
     </section>
     <p class="market-footnote">Sceau de la halle · Échanges entre joueurs · Taxe de vente : 5 %</p>
     </div>
+    <section id="potion-market-content" hidden aria-label="Commerce des potions">
+      <p id="potion-market-message" class="message" role="status" aria-live="polite"></p>
+      <button id="potion-market-retry" type="button" hidden>Vérifier la transaction en attente</button>
+      <nav class="market-tabs" aria-label="Sections du marché des potions"><button type="button" data-potion-market-tab="buy" aria-pressed="true">Acheter</button><button type="button" data-potion-market-tab="sell" aria-pressed="false">Vendre</button><button type="button" data-potion-market-tab="own" aria-pressed="false">Mes ventes</button></nav>
+      <section id="potion-market-buy">
+        <div class="market-filters"><label>Potion<select id="potion-market-filter"><option value="">Toutes</option></select></label><label>Prix unitaire<select id="potion-market-sort"><option value="asc">Croissant</option><option value="desc">Décroissant</option></select></label><button id="potion-market-refresh" type="button">Actualiser</button></div>
+        <div id="potion-market-board" class="market-grid"></div>
+        <div class="market-pages"><button id="potion-market-prev" type="button">Précédent</button><span id="potion-market-page">Page 1</span><button id="potion-market-next" type="button">Suivant</button></div>
+      </section>
+      <section id="potion-market-sell" hidden>
+        <form id="potion-market-form" class="market-sell-form"><h3>Mettre une potion en vente</h3><label>Potion possédée<select id="potion-market-item" required></select></label><p id="potion-market-owned"></p><label>Quantité<input id="potion-market-quantity" inputmode="numeric" pattern="[0-9]+" value="1" required></label><label>Prix unitaire en pièces d’or<input id="potion-market-price" inputmode="numeric" pattern="[0-9]+" value="1" required></label><p id="potion-market-estimate" class="market-purchase-total"></p><p class="market-note">Les potions sont retirées de votre inventaire disponible dès publication. Dix offres actives maximum. Le prix payé est intégralement crédité au vendeur.</p><button id="potion-market-publish" type="submit">Publier ma vente</button></form>
+      </section>
+      <section id="potion-market-own" hidden><h3>Mes ventes</h3><div id="potion-market-offers" class="market-grid"></div><h3>Potions à récupérer</h3><div id="potion-market-returns" class="market-grid"></div><h3>Achats et ventes récents</h3><div id="potion-market-history" class="market-history"></div></section>
+    </section>
+    </div>
   </dialog>
   <dialog id="market-confirm-dialog" class="confirmation-dialog market-confirm" aria-labelledby="market-confirm-title">
     <h2 id="market-confirm-title">Confirmer l’échange</h2><p id="market-confirm-text"></p>
     <div class="market-tabs"><button id="market-confirm-cancel" type="button">Annuler</button><button id="market-confirm-accept" type="button">Confirmer</button></div>
   </dialog>
+  <dialog id="potion-market-confirm" class="confirmation-dialog market-confirm" aria-labelledby="potion-market-confirm-title"><h2 id="potion-market-confirm-title">Confirmer l’échange de potions</h2><p id="potion-market-confirm-text"></p><div class="market-tabs"><button id="potion-market-confirm-no" type="button" autofocus>Annuler</button><button id="potion-market-confirm-yes" type="button">Confirmer</button></div></dialog>
 
 </body>
 </html>

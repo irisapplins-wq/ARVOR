@@ -206,7 +206,7 @@
         { rpc: 'create_market_listing', params: { p_resource: el('market-resource').value, p_quantity: qty.toString(), p_unit_price: price.toString() } });
     } catch (error) { message(error.message); }
   });
-  window.arvor.market = Object.freeze({ setUser(id) {
+  window.arvor.market = Object.freeze({ refresh, setUser(id) {
     if (player === id) return;
     generation++; readVersion++; player = id; busy = false; pending = null; own = null; board = []; offset = 0;
     if (confirmDialog.open) confirmDialog.close(); if (dialog.open) dialog.close();

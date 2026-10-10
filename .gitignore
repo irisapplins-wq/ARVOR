@@ -92,6 +92,7 @@
 !/js/domain-solar.js
 !/js/inventory.js
 !/js/potion-rewards.js
+!/js/potion-market.js
 !/js/item-catalog.json
 !/js/market.js
 !/js/messaging.js

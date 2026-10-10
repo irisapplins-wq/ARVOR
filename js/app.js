@@ -2386,6 +2386,7 @@
     window.arvor?.potionRewards?.setUser(userId);
     window.arvor?.quests?.setUser(userId);
     window.arvor?.market?.setUser(userId);
+    window.arvor?.potionMarket?.setUser(userId);
     window.arvor?.registration?.setSession(session);
     password.value = '';
     loading = Boolean(userId);
