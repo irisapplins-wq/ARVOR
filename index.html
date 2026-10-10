@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="ARVOR — Les Terres d’Armorique, jeu de stratégie multijoueur persistant.">
+  <title>ARVOR — Les Terres d’Armorique</title>
+  <link rel="stylesheet" href="css/style.css?v=quest-framework-20261010">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="js/supabase.js" defer></script>
+  <script src="js/messaging.js?v=mail-attachment-reading-20261010" defer></script>
+  <script src="js/registration.js?v=auth-20261007" defer></script>
+  <script src="js/tavern.js?v=tavern-v1-20261007" defer></script>
+  <script src="js/quest-items.js?v=quest-catalog-20261010" defer></script>
+  <script src="js/inventory.js?v=quest-catalog-20261010" defer></script>
+  <script src="js/quests.js?v=quest-ui-phase14-20261010" defer></script>
+  <script src="js/market.js?v=market-hall-20261008" defer></script>
+  <script src="js/raid-departure.js?v=pvp-phase10-20261010" defer></script>
+  <script src="js/raids.js?v=pvp-phase10-20261010" defer></script>
+  <script src="js/world-grid-diagnostic.js?v=world-grid-20261008" defer></script>
+  <script src="js/domain-solar.js?v=royaume-vivant-20261010" defer></script>
+  <script src="js/domain-ambience.js?v=royaume-vivant-20261010" defer></script>
+  <script src="js/app.js?v=quest-framework-20261010" defer></script>
+</head>
+<body>
+  <main class="welcome">
+    <header class="brand">
+      <span class="ornament" aria-hidden="true">✦</span>
+      <h1>ARVOR</h1>
+      <p class="subtitle">Les Terres d’Armorique</p>
+      <p class="introduction">Aux portes des terres bretonnes</p>
+    </header>
+    <section class="login" aria-labelledby="login-title">
+      <div id="login-panel">
+      <nav id="auth-choices" class="auth-choices" aria-label="Accès à ARVOR">
+        <button id="choose-login" type="button" aria-pressed="true">Se connecter</button>
+        <button id="choose-registration" type="button" aria-pressed="false">Créer un compte</button>
+      </nav>
+      <h2 id="login-title">Entrez en Armorique</h2>
+      <form id="login-form" method="post">
+        <div class="field">
+          <label for="email">Adresse e-mail</label>
+          <input id="email" name="email" type="email" autocomplete="username" inputmode="email" autocapitalize="none" spellcheck="false" required aria-describedby="login-message">
+        </div>
+        <div class="field">
+          <label for="password">Mot de passe</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" required aria-describedby="login-message">
+        </div>
+        <button id="login-button" type="submit" disabled>Entrer en Armorique</button>
+        <button id="show-confirmation-resend" class="auth-resend-option" type="button" disabled>Renvoyer l’e-mail de confirmation</button>
+
+      </form>
+      <form id="confirmation-resend-form" method="post" novalidate hidden>
+        <p class="registration-help">Saisissez uniquement votre adresse e-mail pour demander un nouveau lien de confirmation.</p>
+        <div class="field">
+          <label for="confirmation-resend-email">Adresse e-mail</label>
+          <input id="confirmation-resend-email" name="email" type="email" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" required aria-describedby="login-message">
+        </div>
+        <button id="confirmation-resend-submit" type="submit" disabled>Renvoyer l'e-mail</button>
+        <button id="confirmation-resend-back" class="auth-resend-option" type="button">Retour à la connexion</button>
+      </form>
+      <form id="registration-form" method="post" novalidate hidden>
+        <p id="registration-help" class="registration-help">Votre adresse e-mail reste privée. Lettres, chiffres, espaces, apostrophes, tirets et underscores sont autorisés dans les noms.</p>
+        <div id="registration-auth-fields">
+          <div class="field"><label for="registration-email">Adresse e-mail</label><input id="registration-email" name="email" type="email" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" required></div>
+          <div class="field"><label for="registration-password">Mot de passe</label><input id="registration-password" name="password" type="password" autocomplete="new-password" minlength="8" required><small>Au moins 8 caractères.</small></div>
+          <div class="field"><label for="registration-confirmation">Confirmer le mot de passe</label><input id="registration-confirmation" name="confirmation" type="password" autocomplete="new-password" minlength="8" required></div>
+        </div>
+        <div class="field"><label for="registration-username">Pseudo</label><input id="registration-username" name="username" autocomplete="nickname" minlength="3" maxlength="32" required aria-describedby="registration-help"></div>
+        <div class="field"><label for="registration-domain">Nom du domaine</label><input id="registration-domain" name="domain" minlength="3" maxlength="60" required aria-describedby="registration-help"></div>
+        <button id="registration-button" type="submit" disabled>Créer mon compte</button>
+      </form>
+      </div>
+      <nav id="social-navigation" class="social-navigation" aria-label="Vie en Armorique" hidden>
+        <button id="show-player-profile" type="button">Profil</button>
+        <button id="show-messaging" type="button" aria-label="Messagerie">Messagerie<span id="message-unread-count" class="private-message-badge" hidden></span></button>
+        <button id="show-tavern" type="button">Taverne</button>
+        <button id="show-market" type="button" disabled>Marché</button>
+        <button id="show-inventory" type="button" disabled>Inventaire</button>
+        <button id="show-quests" type="button" disabled>Quêtes</button>
+      </nav>
+      <section id="player-screen" aria-labelledby="player-welcome" hidden>
+        <h2 id="player-welcome"></h2>
+        <h3 id="domain-name"></h3>
+        <dl class="stats">
+          <div><dt>Développement</dt><dd id="domain-stage"></dd></div>
+          <div><dt>Population</dt><dd id="domain-population"></dd></div>
+          <div><dt>Travailleurs</dt><dd id="population-workers"></dd></div>
+          <div><dt>Recrues</dt><dd id="population-recruits"></dd></div>
+          <div><dt>Soldats</dt><dd id="population-soldiers"></dd></div>
+          <div><dt>Disponibles</dt><dd id="population-available"></dd></div>
+          <div><dt>Puissance</dt><dd id="domain-power"></dd></div>
+        </dl>
+        <div class="population-details" aria-live="polite" aria-atomic="true">
+          <p id="population-rates"></p>
+          <p id="population-status"></p>
+          <p id="development-progress"></p>
+        </div>
+        <h3>Ressources</h3>
+        <dl class="stats">
+          <div><dt>🌾 Vivres</dt><dd id="resource-food"></dd></div>
+          <div><dt>🪵 Bois</dt><dd id="resource-wood"></dd></div>
+          <div><dt>🪨 Pierre</dt><dd id="resource-stone"></dd></div>
+          <div><dt>⛓️ Fer</dt><dd id="resource-iron"></dd></div>
+          <div><dt>🪙 Pièces</dt><dd id="resource-coins"></dd></div>
+        </dl>
+        <nav class="map-view-switch" aria-label="Vue de la carte">
+          <button id="show-domain-view" type="button" aria-pressed="true" aria-controls="domain-view">Vue du domaine</button>
+          <button id="show-armorique-view" type="button" aria-pressed="false" aria-controls="armorique-view">Carte d’Armorique</button>
+        </nav>
+        <section id="domain-view" class="domain-view" aria-labelledby="domain-view-title">
+          <h3 id="domain-view-title">Vue du domaine</h3>
+          <div class="domain-map-container">
+            <img class="domain-map" src="assets/images/domain_01.png"
+              alt="Carte du domaine d’Armorique : emplacements de la Ferme, de la Scierie, de la Carrière, de la Mine, du Grenier et de l’Entrepôt."
+              width="1536" height="1024" decoding="async">
+          </div>
+        </section>
+        <section id="armorique-view" aria-labelledby="armorique-title" hidden>
+          <h3 id="armorique-title">Carte d’Armorique</h3>
+          <div class="armorique-accessible-controls">
+            <label for="armorique-domain-choice">Domaines découverts<select id="armorique-domain-choice" disabled><option value="">Choisir un domaine découvert</option></select></label>
+            <label for="armorique-location-choice">Lieux découverts<select id="armorique-location-choice" disabled><option value="">Choisir un lieu découvert</option></select></label>
+            <label for="armorique-frontier-choice">Explorer une zone frontière<select id="armorique-frontier-choice" disabled><option value="">Choisir une zone autorisée</option></select></label>
+          </div>
+          <p id="armorique-message" class="message" role="status"></p>
+          <div class="armorique-map-container">
+            <img id="armorique-map" src="assets/images/armorique_map.png" alt="Carte d’Armorique" width="1250" height="1000" decoding="async">
+            <svg id="armorique-fog" class="armorique-fog" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+              <defs>
+                <linearGradient id="armorique-fog-shade" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#242c30"/>
+                  <stop offset="0.5" stop-color="#364043"/>
+                  <stop offset="1" stop-color="#222c32"/>
+                </linearGradient>
+                <!-- Couleur et texture continues, indépendantes des découvertes. -->
+                <filter id="armorique-fog-mist" filterUnits="userSpaceOnUse" primitiveUnits="userSpaceOnUse"
+                  x="-5" y="-5" width="110" height="110" color-interpolation-filters="sRGB">
+                  <feTurbulence type="fractalNoise" baseFrequency="0.055 0.085" numOctaves="3" seed="17" result="smoke"/>
+                  <feColorMatrix in="smoke" type="saturate" values="0" result="gray-smoke"/>
+                  <feColorMatrix in="gray-smoke" type="matrix"
+                    values="0.25 0 0 0 0.35  0 0.25 0 0 0.35  0 0 0.25 0 0.35  0 0 0 0 1" result="soft-smoke"/>
+                  <feFlood flood-color="#303b3f" result="fog-color"/>
+                  <feBlend in="fog-color" in2="soft-smoke" mode="soft-light"/>
+                </filter>
+                <!-- Masque interieur global, sans flou debordant. -->
+                <!-- Voile complet de repli, conservé jusqu’à une publication réussie. -->
+                <filter id="armorique-unknown-solid" filterUnits="userSpaceOnUse" primitiveUnits="userSpaceOnUse" x="0" y="0" width="100" height="100">
+                  <feComponentTransfer in="SourceAlpha" result="coverage"><feFuncA type="linear" slope="255" intercept="0"/></feComponentTransfer>
+                  <feFlood flood-color="white" result="opaque-fog"/>
+                  <feComposite in="opaque-fog" in2="coverage" operator="in"/>
+                </filter>
+                <!-- Garde exacte : le dégradé s'éteint à l'intérieur avant ce découpage. -->
+                <clipPath id="armorique-known-clip" clipPathUnits="userSpaceOnUse">
+                  <path id="armorique-known-cells" clip-rule="evenodd" d=""/>
+                </clipPath>
+                <mask id="armorique-discovery-mask" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse" x="0" y="0" width="100" height="100" style="mask-type: luminance">
+                  <rect width="100" height="100" fill="white"/>
+                  <g clip-path="url(#armorique-known-clip)">
+                    <image id="armorique-opening" x="0" y="0" width="100" height="100" preserveAspectRatio="none"/>
+                    <path id="armorique-reveal" fill="none" d=""/>
+                  </g>
+                  <path id="armorique-unknown-guard" fill="white" fill-rule="evenodd" filter="url(#armorique-unknown-solid)" d="M0 0H100V100H0Z"/>
+                </mask>
+              </defs>
+              <path id="armorique-fog-cover" filter="url(#armorique-fog-mist)" mask="url(#armorique-discovery-mask)" fill="url(#armorique-fog-shade)" d="M0 0H100V100H0Z"/>
+            </svg>
+            <div id="armorique-marker" class="armorique-marker" hidden>
+              <span class="armorique-marker-icon" aria-hidden="true">♜</span>
+              <span id="armorique-domain-label"></span>
+            </div>
+          </div>
+          <section class="expedition-notice" aria-label="Exploration">
+            <div><p class="expedition-eyebrow">Aux frontières de l’Armorique</p><p id="expedition-notice-text">État des expéditions en cours de chargement…</p></div>
+            <button id="expedition-view" type="button" hidden>Voir l’expédition</button>
+          </section>
+          <p id="expedition-map-message" class="message" role="status" aria-live="polite"></p>
+          <p id="armorique-fog-message" class="message" role="status">Découvertes en cours de chargement…</p>
+          <p id="armorique-image-message" class="message" role="status" hidden>Image manquante : placez la carte master dans assets/images/armorique_map.png.</p>
+        </section>
+        <section aria-labelledby="buildings-title">
+          <h3 id="buildings-title">Bâtiments</h3>
+          <div id="building-list" class="building-list"></div>
+          <p id="building-message" class="message" role="status" aria-live="polite" aria-atomic="true"></p>
+        </section>
+        <section class="army-panel" aria-labelledby="army-title">
+          <h3 id="army-title">Armée</h3>
+          <dl class="stats">
+            <div><dt>Soldats</dt><dd id="army-soldiers"></dd></div>
+            <div class="army-composition"><dt>Fantassins</dt><dd id="army-count-infantry"></dd></div>
+            <div class="army-composition"><dt>Archers</dt><dd id="army-count-archer"></dd></div>
+            <div class="army-composition"><dt>Éclaireurs</dt><dd id="army-count-scout"></dd></div>
+            <div><dt>Recrues</dt><dd id="army-recruits"></dd></div>
+            <div><dt>Disponibles</dt><dd id="army-available"></dd></div>
+          </dl>
+          <div id="army-list" class="building-list army-list"></div>
+          <h4>Formation en cours</h4>
+          <ul id="recruitment-list" class="recruitment-list"></ul>
+          <p id="army-message" class="message" role="status" aria-live="polite" aria-atomic="true"></p>
+        </section>
+      </section>
+      <button id="logout-button" type="button" hidden>Se déconnecter</button>
+      <p id="login-message" class="message" role="status" aria-live="polite" aria-atomic="true"></p>
+      <noscript><p>Activez JavaScript pour utiliser le formulaire.</p></noscript>
+    </section>
+    <footer>Jeu de stratégie multijoueur persistant</footer>
+  </main>
+  <dialog id="confirmation-dialog" class="confirmation-dialog"
+    aria-labelledby="confirmation-title" aria-describedby="confirmation-text">
+    <h2 id="confirmation-title"></h2>
+    <p id="confirmation-text"></p>
+    <div class="confirmation-actions">
+      <button id="confirmation-cancel" type="button" autofocus>Annuler</button>
+      <button id="confirmation-accept" type="button">Confirmer</button>
+    </div>
+  </dialog>
+  <dialog id="expedition-dialog" class="confirmation-dialog expedition-dialog" aria-labelledby="expedition-title">
+    <header class="expedition-header"><div><p class="expedition-eyebrow">Les routes de l’inconnu</p><h2 id="expedition-title">Préparer l’expédition</h2></div><button id="expedition-close" class="expedition-close" type="button" aria-label="Fermer le panneau d’expédition">×</button></header>
+    <div id="expedition-content"></div>
+    <p id="expedition-message" class="message" role="status" aria-live="polite"></p>
+  </dialog>
+  <dialog id="inventory-dialog" class="confirmation-dialog inventory-dialog" aria-labelledby="inventory-title" aria-describedby="inventory-description">
+    <header class="inventory-heading">
+      <div><p class="inventory-kicker">Le coffre d’Armorique</p><h2 id="inventory-title">INVENTAIRE</h2><p id="inventory-description">Gardez ici les trésors de vos voyages.</p></div>
+      <button id="inventory-close" type="button" autofocus>Fermer</button>
+    </header>
+    <div class="inventory-summary"><span>Votre sacoche</span><span id="inventory-count" aria-label="0 emplacement occupé sur 30">0 / 30</span></div>
+    <nav class="inventory-categories" aria-label="Catégories de l’inventaire">
+      <button type="button" data-inventory-category="all" aria-pressed="true">Tout</button>
+      <button type="button" data-inventory-category="equipment" aria-pressed="false">Équipement</button>
+      <button type="button" data-inventory-category="items" aria-pressed="false">Objets</button>
+      <button type="button" data-inventory-category="quests" aria-pressed="false">Quêtes</button>
+      <button type="button" data-inventory-category="potions" aria-pressed="false">Potions</button>
+    </nav>
+    <div class="inventory-composition">
+      <section class="inventory-storage" aria-label="Les 30 emplacements de votre inventaire">
+        <ol id="inventory-grid" class="inventory-grid" aria-label="Inventaire vide — 30 emplacements"></ol>
+        <p class="inventory-empty">Votre coffre est encore vide.</p>
+      </section>
+      <aside class="inventory-equipment" aria-labelledby="inventory-equipment-title">
+        <h3 id="inventory-equipment-title">Équipement</h3>
+        <div class="inventory-equipment-frame" aria-hidden="true"><span></span></div>
+        <p>Aucun équipement porté</p>
+      </aside>
+    </div>
+  </dialog>
+
+  <dialog id="quest-dialog" class="confirmation-dialog quest-dialog" aria-labelledby="quest-title">
+    <header class="quest-heading"><div><p class="inventory-kicker">Les récits d’Armorique</p><h2 id="quest-title">Journal de quêtes</h2></div><button id="quest-close" type="button">✕ Fermer</button></header>
+    <p id="quest-notice" class="message" role="status" aria-live="polite"></p>
+    <nav class="quest-tabs" aria-label="Quêtes"><button type="button" data-quest-tab="AVAILABLE" aria-pressed="true">Disponibles</button><button type="button" data-quest-tab="ACTIVE" aria-pressed="false">En cours</button><button type="button" data-quest-tab="COMPLETED" aria-pressed="false">Terminées</button></nav>
+    <div class="quest-layout"><section id="quest-list" aria-label="Liste des quêtes"></section><article id="quest-details" aria-label="Détails de la quête"></article></div>
+    <button id="quest-refresh" type="button">Actualiser le journal</button>
+  </dialog>
+  <dialog id="quest-npc-dialog" class="confirmation-dialog quest-npc-dialog" aria-labelledby="quest-npc-title">
+    <header class="quest-heading"><h2 id="quest-npc-title">Dialogue</h2><button id="quest-npc-close" type="button">✕ Fermer</button></header>
+    <p id="quest-npc-description"></p><p id="quest-npc-text" class="quest-npc-text"></p>
+    <p id="quest-npc-notice" class="message" role="status" aria-live="polite"></p><div id="quest-npc-actions" class="quest-actions"></div>
+    <section id="quest-confirmation" hidden aria-label="Confirmation"><p id="quest-confirmation-text"></p><button id="quest-confirm-yes" type="button">Confirmer</button><button id="quest-confirm-no" type="button">Annuler</button></section>
+  </dialog>
+
+  <dialog id="tavern-dialog" class="confirmation-dialog tavern-dialog" aria-labelledby="tavern-title">
+    <header class="tavern-heading">
+      <div><p class="tavern-kicker">Au coin du feu</p><h2 id="tavern-title">La Taverne d’Armorique</h2><p>Une table, une parole, les gens d’Armorique.</p></div>
+      <button id="tavern-close" type="button" aria-label="Fermer la Taverne">Fermer</button>
+    </header>
+    <div class="tavern-toolbar"><span id="tavern-connection" role="status" aria-live="polite"></span><button id="tavern-refresh" type="button">Actualiser</button></div>
+    <div id="tavern-stream" class="tavern-stream" role="region" aria-label="Conversation publique — derniers messages" tabindex="0"></div>
+    <button id="tavern-new" class="tavern-new" type="button" hidden>Nouveaux messages ↓</button>
+    <div id="tavern-delete-confirm" class="tavern-delete-confirm" role="group" aria-label="Confirmation de suppression" hidden>
+      <p>Supprimer ce message de la Taverne ? Cette action est définitive.</p>
+      <div class="confirmation-actions"><button id="tavern-delete-cancel" type="button">Annuler</button><button id="tavern-delete-accept" type="button">Supprimer</button></div>
+    </div>
+    <form id="tavern-form" class="tavern-form" novalidate>
+      <label for="tavern-input">Écrire un message…</label>
+      <textarea id="tavern-input" rows="3" placeholder="Prenez place et partagez quelques mots…" aria-describedby="tavern-count tavern-message"></textarea>
+      <div class="tavern-compose-footer"><small id="tavern-count">0 / 500</small><button id="tavern-send" type="submit" disabled>Envoyer</button></div>
+    </form>
+    <p id="tavern-message" class="message" role="status" aria-live="polite"></p>
+  </dialog>
+
+  <dialog id="messaging-dialog" class="confirmation-dialog social-dialog messaging-dialog" aria-labelledby="messaging-title">
+    <header class="social-dialog-header messaging-header"><h2 id="messaging-title">Messagerie</h2><button id="messaging-close" type="button" aria-label="Fermer la boîte aux lettres">✕ Fermer</button></header>
+    <nav id="message-tabs" class="message-tabs" aria-label="Dossiers de messagerie">
+      <button type="button" data-message-tab="received" aria-pressed="true">Réception</button>
+      <button type="button" data-message-tab="sent" aria-pressed="false">Envoyés</button>
+      <button type="button" data-message-tab="compose" aria-pressed="false">Nouveau message</button>
+    </nav>
+    <p id="messaging-message" class="message" role="status" aria-live="polite"></p>
+    <section id="message-mailbox" class="message-mailbox">
+      <div class="message-list-pane">
+        <p id="message-empty">Aucun message.</p>
+        <ul id="message-list" class="private-message-list"></ul>
+        <button id="message-more" type="button" hidden>Messages précédents</button>
+      </div>
+      <article id="message-reading" class="message-reading" tabindex="-1" hidden>
+        <button id="message-read-back" type="button">Retour à la liste</button>
+        <p id="message-read-person"></p><p id="message-read-origin" class="message-origin"></p><h3 id="message-read-subject"></h3>
+        <p id="message-read-date" class="message-date"></p>
+        <p id="message-read-body" class="private-message-body"></p>
+        <div id="message-read-attachment" class="message-attachment-reader" hidden>
+          <span id="message-read-attachment-label"></span>
+          <button id="message-attachment-claim" type="button" disabled>Récupérer — indisponible</button>
+        </div>
+        <button id="message-reply" type="button" hidden>Répondre</button>
+        <button id="message-delete" type="button">Supprimer de ma messagerie</button>
+      </article>
+    </section>
+    <section id="message-compose" hidden>
+      <form id="message-recipient-form" class="message-recipient-form">
+        <label for="message-recipient-query">Destinataire — recherche par pseudo</label>
+        <div class="social-search-controls"><input id="message-recipient-query" type="search" maxlength="128" autocomplete="off"><button id="message-recipient-search" type="submit">Rechercher</button></div>
+      </form>
+      <div id="message-recipient-results" class="message-recipient-results"></div>
+      <p id="message-recipient-selected"></p>
+      <form id="message-compose-form" class="message-compose-form">
+        <label for="message-subject">Sujet</label><input id="message-subject" type="text" maxlength="120" required autocomplete="off">
+        <label for="message-body">Message</label><textarea id="message-body" rows="8" maxlength="5000" required></textarea>
+        <div id="message-attachment-tools" class="message-attachment-tools">
+          <button id="message-attachment-add" type="button">📎 Ajouter un objet</button>
+          <span id="message-attachment-line" class="message-attachment-line" hidden></span>
+        </div>
+        <p id="message-compose-status" class="message" role="status" aria-live="polite"></p>
+        <button id="message-send" type="submit" disabled>Envoyer</button>
+      </form>
+    </section>
+  </dialog>
+
+  <dialog id="player-profile-dialog" class="confirmation-dialog social-dialog" aria-labelledby="player-profile-title">
+    <div class="social-dialog-header">
+      <h2 id="player-profile-title">Profils d’Armorique</h2>
+      <button id="player-profile-close" type="button" aria-label="Fermer les profils">Fermer</button>
+    </div>
+    <button id="show-own-profile" type="button" class="social-own-profile">Mon profil</button>
+    <section aria-label="Profil public">
+      <p id="player-profile-message" class="message" role="status" aria-live="polite"></p>
+      <div id="player-profile-details" hidden>
+        <dl class="social-profile-details">
+          <div class="social-profile-identity">
+            <dt>Pseudo</dt>
+            <dd>
+              <span id="public-username" class="social-profile-name"></span>
+              <!-- Titre public fourni par le serveur ; masqué lorsque la donnée est absente. -->
+              <span id="public-title" class="social-profile-public-title" hidden></span>
+            </dd>
+          </div>
+          <div class="social-profile-domain"><dt>Domaine</dt><dd id="public-domain"></dd></div>
+          <div><dt>Stade</dt><dd id="public-stage"></dd></div>
+          <div><dt>Puissance</dt><dd id="public-power"></dd></div>
+        </dl>
+        <p id="public-joined"></p>
+      </div>
+    </section>
+    <section class="social-search" aria-labelledby="player-search-title">
+      <h3 id="player-search-title">Trouver un joueur</h3>
+      <form id="player-search-form">
+        <label for="player-search-input">Pseudo</label>
+        <div class="social-search-controls">
+          <input id="player-search-input" name="pseudo" type="search" maxlength="128" autocomplete="off" spellcheck="false" required aria-describedby="player-search-help player-search-message">
+          <button id="player-search-submit" type="submit">Rechercher</button>
+        </div>
+        <p id="player-search-help">Pseudo exact ou début de pseudo de trois caractères minimum. Les accents comptent.</p>
+      </form>
+      <p id="player-search-message" class="message" role="status" aria-live="polite"></p>
+      <ul id="player-search-results" class="social-search-results" aria-label="Joueurs trouvés"></ul>
+    </section>
+  </dialog>
+
+  <dialog id="market-dialog" class="confirmation-dialog market-dialog" aria-labelledby="market-title">
+    <header class="market-header">
+      <div class="market-brand"><span class="market-knot" aria-hidden="true"><img src="assets/market/knot.svg" alt=""></span><div><p class="market-eyebrow">La halle des seigneurs</p><h2 id="market-title">Marché d’Armorique</h2></div></div>
+      <div class="market-header-actions"><span class="market-purse"><img src="assets/market/coins.svg" alt=""><span><small>Votre bourse</small><strong id="market-coins">—</strong><small>pièces d’or</small></span></span><button id="market-close" type="button">✕ Fermer</button></div>
+    </header>
+    <div class="market-content">
+    <p class="market-introduction">Sous les poutres de la halle, les richesses d’Armorique changent de mains.</p>
+    <p id="market-message" class="message" role="status" aria-live="polite"></p>
+    <button id="market-retry" type="button" hidden>Vérifier la transaction en attente</button>
+    <div class="market-tabs" role="group" aria-label="Sections du marché">
+      <button type="button" data-market-tab="buy" aria-pressed="true">Acheter</button>
+      <button type="button" data-market-tab="sell" aria-pressed="false">Vendre</button>
+      <button type="button" data-market-tab="own" aria-pressed="false">Mes offres</button>
+    </div>
+    <section id="market-buy">
+      <div class="market-filters">
+        <label>Ressource<select id="market-filter"><option value="">Toutes</option><option value="food">Vivres</option><option value="wood">Bois</option><option value="stone">Pierre</option><option value="iron">Fer</option></select></label>
+        <label>Prix unitaire<select id="market-sort"><option value="asc">Croissant</option><option value="desc">Décroissant</option></select></label>
+        <button id="market-refresh" type="button">Actualiser</button>
+      </div>
+      <div id="market-board" class="market-grid"></div>
+      <div class="market-pages"><button id="market-prev" type="button">Précédent</button><span id="market-page"></span><button id="market-next" type="button">Suivant</button></div>
+    </section>
+    <section id="market-sell" hidden>
+      <div class="market-selling-layout">
+      <aside class="market-seller-display"><span class="market-eyebrow">Votre étal</span><img id="market-sell-image" src="assets/market/food.svg" alt="Vivres"><h3 id="market-sell-name">Vivres</h3><p>Proposez vos réserves aux marchands et seigneurs d’Armorique.</p><div id="market-wallet" class="market-stock"></div></aside>
+      <form id="market-sell-form" class="market-sell-form"><h3>Préparer une offre</h3>
+        <label>Ressource<select id="market-resource"><option value="food">Vivres</option><option value="wood">Bois</option><option value="stone">Pierre</option><option value="iron">Fer</option></select></label>
+        <label>Quantité<input id="market-quantity" inputmode="numeric" pattern="[0-9]+" value="1" required></label>
+        <label>Prix unitaire en pièces<input id="market-price" inputmode="numeric" pattern="[0-9]+" value="1" required></label>
+        <div id="market-estimate" class="market-ledger" aria-live="polite"></div>
+        <p class="market-note">Les ressources sont retirées du stockage dès publication. Maximum : 10 offres actives. Taxe de 5 % par achat, arrondie à la pièce supérieure.</p>
+        <button id="market-publish" type="submit">Publier mon offre</button>
+      </form></div>
+    </section>
+    <section id="market-own" hidden>
+      <h3>Mes offres</h3><div id="market-offers" class="market-grid"></div>
+      <h3>Réserve à récupérer</h3><p>Les invendus qui dépassent votre stockage restent ici, sans perte.</p><div id="market-reserves" class="market-grid"></div>
+      <h3>Dernières ventes</h3><div id="market-history" class="market-history"></div>
+    </section>
+    <p class="market-footnote">Sceau de la halle · Échanges entre joueurs · Taxe de vente : 5 %</p>
+    </div>
+  </dialog>
+  <dialog id="market-confirm-dialog" class="confirmation-dialog market-confirm" aria-labelledby="market-confirm-title">
+    <h2 id="market-confirm-title">Confirmer l’échange</h2><p id="market-confirm-text"></p>
+    <div class="market-tabs"><button id="market-confirm-cancel" type="button">Annuler</button><button id="market-confirm-accept" type="button">Confirmer</button></div>
+  </dialog>
+
+</body>
+</html>

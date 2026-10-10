@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "items": [
+    {
+      "id": "potion_force",
+      "name": "Potion de Force",
+      "category": "potion",
+      "description": "+15 % d’attaque lors de la prochaine bataille impliquant vos troupes.",
+      "effect": { "type": "prochaine_action", "stat": "attack", "value": 15, "unit": "percent", "durationSeconds": null, "target": "next_battle_involving_player_troops" },
+      "consumable": true,
+      "iconPath": "assets/items/potions/potion_force.png",
+      "rarity": null
+    },
+    {
+      "id": "potion_vitesse",
+      "name": "Potion de Vitesse",
+      "category": "potion",
+      "description": "Réduit de 25 % le temps de trajet de votre prochaine expédition.",
+      "effect": { "type": "prochaine_action", "stat": "travel_time", "value": -25, "unit": "percent", "durationSeconds": null, "target": "next_expedition" },
+      "consumable": true,
+      "iconPath": "assets/items/potions/potion_vitesse.png",
+      "rarity": null
+    },
+    {
+      "id": "potion_construction",
+      "name": "Potion de Construction rapide",
+      "category": "potion",
+      "description": "Réduit de 25 % le temps restant du chantier actif.",
+      "effect": { "type": "immediat", "stat": "remaining_construction_time", "value": -25, "unit": "percent", "durationSeconds": null, "target": "active_construction_site" },
+      "consumable": true,
+      "iconPath": "assets/items/potions/potion_construction.png",
+      "rarity": null
+    },
+    {
+      "id": "potion_rendement",
+      "name": "Potion de Rendement",
+      "category": "potion",
+      "description": "+25 % à toutes les productions pendant 2 heures.",
+      "effect": { "type": "temporaire", "stat": "production", "value": 25, "unit": "percent", "durationSeconds": 7200, "target": "all_production" },
+      "consumable": true,
+      "iconPath": "assets/items/potions/potion_rendement.png",
+      "rarity": null
+    },
+    {
+      "id": "elixir_protection",
+      "name": "Élixir de Protection",
+      "category": "potion",
+      "description": "Réduit de 25 % les pertes lors de la prochaine défense du domaine contre un joueur.",
+      "effect": { "type": "prochaine_action", "stat": "losses", "value": -25, "unit": "percent", "durationSeconds": null, "target": "next_domain_defense_against_player" },
+      "consumable": true,
+      "iconPath": "assets/items/potions/elixir_protection.png",
+      "rarity": null
+    },
+    {
+      "id": "potion_mineur",
+      "name": "Potion du Mineur",
+      "category": "potion",
+      "description": "+50 % à la production de fer pendant 2 heures.",
+      "effect": { "type": "temporaire", "stat": "production", "value": 50, "unit": "percent", "durationSeconds": 7200, "target": "iron_production" },
+      "consumable": true,
+      "iconPath": "assets/items/potions/potion_mineur.png",
+      "rarity": null
+    },
+    {
+      "id": "potion_bucheron",
+      "name": "Potion du Bûcheron",
+      "category": "potion",
+      "description": "+50 % à la production de bois pendant 2 heures.",
+      "effect": { "type": "temporaire", "stat": "production", "value": 50, "unit": "percent", "durationSeconds": 7200, "target": "wood_production" },
+      "consumable": true,
+      "iconPath": "assets/items/potions/potion_bucheron.png",
+      "rarity": null
+    },
+    {
+      "id": "potion_carrier",
+      "name": "Potion du Carrier",
+      "category": "potion",
+      "description": "+50 % à la production de pierre pendant 2 heures.",
+      "effect": { "type": "temporaire", "stat": "production", "value": 50, "unit": "percent", "durationSeconds": 7200, "target": "stone_production" },
+      "consumable": true,
+      "iconPath": "assets/items/potions/potion_carrier.png",
+      "rarity": null
+    },
+    {
+      "id": "potion_moissons",
+      "name": "Potion des Moissons",
+      "category": "potion",
+      "description": "+50 % à la production de nourriture pendant 2 heures.",
+      "effect": { "type": "temporaire", "stat": "production", "value": 50, "unit": "percent", "durationSeconds": 7200, "target": "food_production" },
+      "consumable": true,
+      "iconPath": "assets/items/potions/potion_moissons.png",
+      "rarity": null
+    },
+    {
+      "id": "elixir_fortune",
+      "name": "Élixir de Fortune",
+      "category": "potion",
+      "description": "+25 % aux récompenses en ressources de votre prochaine expédition victorieuse.",
+      "effect": { "type": "prochaine_action", "stat": "resource_rewards", "value": 25, "unit": "percent", "durationSeconds": null, "target": "next_victorious_expedition" },
+      "consumable": true,
+      "iconPath": "assets/items/potions/elixir_fortune.png",
+      "rarity": null
+    }
+  ]
+}
