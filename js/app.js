@@ -679,7 +679,7 @@
       send.addEventListener('click', sendExplorationExpedition);
       expeditionContent.append(destination, expeditionNode('h3', 'Composition de l’expédition', 'expedition-section-title'), grid, scope,
         Object.assign(expeditionNode('p', 'Calcul de la durée…', 'expedition-footnote'), { id: 'e1-preparation-duration' }),
-        expeditionNode('p', 'Exploration géographique : aucune perte, aucun coût de départ et aucun butin. Les troupes restent réservées jusqu’au retour.', 'expedition-footnote'), send);
+        expeditionNode('p', 'Exploration géographique : aucune perte, aucun coût de départ. Une exploration accomplie offre 25 % de chance de rapporter une potion, au maximum une. Les troupes restent réservées jusqu’au retour.', 'expedition-footnote'), send);
       updateExpeditionControls();
     } else if (expeditionRecord) {
       expeditionPanelMode = 'tracking';
@@ -709,6 +709,7 @@
           result.append(expeditionNode('p', record.new_domains.length ? 'Domaines révélés : ' + record.new_domains.map(d => d.domain_name + ' · ' + d.player_name).join(', ') + '.' : 'Aucun nouveau domaine révélé.'));
         } else if (expeditionNewLand) result.append(expeditionNode('p', 'Nouvelles terres cartographiées.'));
         expeditionContent.append(result);
+        void window.arvor.potionRewards?.renderFor(record.id, result);
       }
       updateExpeditionTimeline();
     }
@@ -1115,7 +1116,7 @@
       retry.addEventListener('click', queueLocationPreparation);
       const send = add('button', 'Lancer l’expédition', 'expedition-send'); send.id = 'location-send'; send.type = 'button';
       send.addEventListener('click', () => void confirmLocationDeparture());
-      expeditionContent.append(retry, send); updateLocationControls(); return;
+      expeditionContent.append(add('p', 'Une victoire offre 50 % de chance de rapporter une potion, au maximum une, en plus du butin existant.', 'expedition-footnote'), retry, send); updateLocationControls(); return;
     }
     const r = locationRecord;
     if (!r) { expeditionContent.append(add('p', 'Suivi en cours de chargement…')); return; }
@@ -1143,6 +1144,7 @@
           (returned ? ' · Stocké : ' + (loot.stored ?? '—') + ' · Excédent : ' + (loot.excess ?? '—') : '')));
       }
       expeditionContent.append(result);
+      void window.arvor.potionRewards?.renderFor(r.expedition_id, result);
     }
     if (!locationIsActive()) {
       const close = add('button', 'Fermer le rapport'); close.type = 'button';
@@ -2381,6 +2383,7 @@
     window.arvor?.messaging?.setUser(userId);
     window.arvor?.tavern?.setUser(userId);
     window.arvor?.inventory?.setUser(userId);
+    window.arvor?.potionRewards?.setUser(userId);
     window.arvor?.quests?.setUser(userId);
     window.arvor?.market?.setUser(userId);
     window.arvor?.registration?.setSession(session);

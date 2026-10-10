@@ -8,6 +8,12 @@
   let busy = false, pending = null, confirmation = null, npc = null, opener = null, dialogueEpoch = 0;
   const labels = { LOCKED:'Verrouillée', AVAILABLE:'Disponible', ACTIVE:'En cours', READY_TO_TURN_IN:'Prête à remettre', COMPLETED:'Terminée' };
   const item = id => window.ARVORQuestItems?.items.find(x => x.id === id);
+  let rewardCatalog;
+  function loadRewardCatalog() {
+    rewardCatalog ||= fetch('js/item-catalog.json').then(r => { if (!r.ok) throw Error('Catalogue indisponible'); return r.json(); }).then(c => c.items).catch(() => []);
+    return rewardCatalog;
+  }
+  let rewardItems = [];
   function node(tag, text, className) { const n = document.createElement(tag); if (text !== undefined) n.textContent = text; if (className) n.className = className; return n; }
   function button(text, callback, disabled = false) { const b = node('button', text); b.type = 'button'; b.disabled = disabled || busy; b.addEventListener('click', callback); return b; }
   function errorText(error) {
@@ -30,7 +36,7 @@
     const resources = {food:'nourriture',wood:'bois',stone:'pierre',iron:'fer'};
     const parts = Object.entries(q.rewards.resources || {}).map(([k,v]) => v + ' ' + (resources[k] || k));
     if (Number(q.rewards.coins)) parts.push(q.rewards.coins + ' pièces d’or');
-    for (const [k,v] of Object.entries(q.rewards.items || {})) parts.push(v + ' × ' + (item(k)?.name || k));
+    for (const [k,v] of Object.entries(q.rewards.items || {})) parts.push(v + ' × ' + (item(k)?.name || rewardItems.find(i => i.id === k)?.name || k));
     return parts.join(' · ') || 'La suite de votre aventure';
   }
   function render() {
@@ -61,7 +67,7 @@
   }
   async function refresh() {
     if (busy || !user) return; const e = epoch; busy = true; notice.textContent = 'Lecture du journal…'; render();
-    try { const data = await rpc('get_my_quests'); if (e !== epoch) return; valid(data); notice.textContent = enabled ? 'Votre progression est vérifiée côté serveur.' : 'Les quêtes ne sont pas encore ouvertes.'; }
+    try { const [data,catalog] = await Promise.all([rpc('get_my_quests'),loadRewardCatalog()]); if (e !== epoch) return; rewardItems = catalog; valid(data); notice.textContent = enabled ? 'Votre progression est vérifiée côté serveur.' : 'Les quêtes ne sont pas encore ouvertes.'; }
     catch (error) { if (e !== epoch) return; enabled = false; list = []; selected = null; notice.textContent = errorText(error); }
     finally { if (e === epoch) { busy = false; render(); } }
   }

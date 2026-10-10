@@ -91,6 +91,7 @@
 !/js/domain-ambience.js
 !/js/domain-solar.js
 !/js/inventory.js
+!/js/potion-rewards.js
 !/js/item-catalog.json
 !/js/market.js
 !/js/messaging.js
