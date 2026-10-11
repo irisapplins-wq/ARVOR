@@ -1,0 +1,134 @@
+/* Bibliothèque graphique du royaume. Les repères de carte et le marché sont exclus. */
+:root {
+  --realm-wood: url('../assets/relooking/pilot/wood-panel.webp');
+  --realm-paper: url('../assets/relooking/pilot/parchment-light.webp');
+  --realm-frame: url('../assets/relooking/pilot/frame-panel.webp');
+  --realm-ivy: url('../assets/relooking/pilot/ivy-divider.webp');
+  --realm-linen: url('../assets/relooking/shared/linen.webp');
+  --realm-metal: url('../assets/relooking/shared/metal.webp');
+  --realm-gold: #c5a66c; --realm-ink: #352719;
+  --realm-wood-fill: linear-gradient(#1b1611df,#17130fe8),var(--realm-wood) center / 768px auto;
+  --realm-paper-fill: linear-gradient(#f6e3ba33,#f6e3ba33),var(--realm-paper) center / 100% 100%;
+  --realm-button-fill: linear-gradient(#364e2b,#182c1b);
+}
+body { background:radial-gradient(ellipse at 50% 0,#78532233,transparent 50%),linear-gradient(#0c110eeb,#0c110ef2),var(--realm-wood) center / 768px auto; }
+.welcome { padding-inline:clamp(.5rem,2vw,1.5rem); }
+.brand { position:relative; padding:1.8rem 1rem; margin-bottom:1.5rem; background:url('../assets/relooking/shared/lantern-banner.webp') center / auto 100% no-repeat; }
+.brand h1 { font-size:clamp(2.2rem,7vw,4.7rem); color:#f6dfac; letter-spacing:.1em; text-shadow:0 2px 3px #000,0 0 12px #000; }
+.brand .subtitle { color:#f3deb5; text-shadow:0 2px 3px #000; }
+.brand .introduction { color:#f4e3c1; text-shadow:0 2px 3px #000; }
+.brand::after { display:none; }
+.brand .ornament { filter:drop-shadow(0 2px 2px #000); }
+/* Même matériau pour tous les vrais panneaux ; aucune boîte décorative dans le DOM. */
+.realm-window, .login, dialog:not(:where(#market-dialog,.market-confirm)), dialog.confirmation-dialog:not(:where(#market-dialog,.market-confirm)) {
+  background:var(--realm-wood-fill); border-color:var(--realm-gold);
+  border-image:var(--realm-frame) 210 275 210 275 / 13px / 0 stretch;
+  box-shadow:0 20px 70px #000c,inset 0 0 25px #0008; color:#eee0c4;
+}
+dialog:not(:where(#market-dialog,.market-confirm)) { scrollbar-color:#a38a56 #18160f; overflow-y:auto; }
+dialog:not(:where(#market-dialog,.market-confirm))::backdrop { background:#080c09d9; }
+.realm-header, :is(.inventory-heading,.quest-heading,.messaging-header,.raid-header,.tavern-heading,.social-dialog-header,.expedition-header) {
+  background:linear-gradient(#261e16e6,#1b1811e6),var(--realm-wood) center / cover;
+  border-bottom:2px double var(--realm-gold); box-shadow:0 4px 8px #0004;
+}
+/* Boutons vivants : aucun bitmap avec texte, aucun style sur les cibles de carte. */
+button:not(:where(#market-dialog *, .market-confirm *, .armorique-location-marker, .armorique-foreign-domain, .expedition-frontier-cell)) {
+  min-height:44px; min-width:44px; color:#fff0ca; background:var(--realm-button-fill);
+  border-color:#b19761; border-radius:3px;
+  box-shadow:inset 0 0 0 2px #19251a,inset 0 0 0 3px #846c41,0 3px 5px #0005;
+  text-shadow:0 1px #000; touch-action:manipulation;
+}
+button:not(:where(#market-dialog *, .market-confirm *, .armorique-location-marker, .armorique-foreign-domain, .expedition-frontier-cell)):hover:not(:disabled) {
+  background:linear-gradient(#4b6636,#284325); border-color:#e0bf7b; color:#fff4d7;
+}
+button:not(:where(#market-dialog *, .market-confirm *, .armorique-location-marker, .armorique-foreign-domain, .expedition-frontier-cell)):active:not(:disabled) { box-shadow:inset 0 3px 7px #0008,inset 0 0 0 2px #c5a66c; }
+button:not(:where(#market-dialog *, .market-confirm *)):disabled { opacity:.58; text-shadow:none; }
+:is(button,input,select,textarea,summary):not(:where(#market-dialog *, .market-confirm *, .expedition-frontier-cell)):focus-visible { outline:3px solid #f0ce87; outline-offset:3px; }
+:is(input,select,textarea):not(:where(#market-dialog *, .market-confirm *, [type='checkbox'])) {
+  box-sizing:border-box; max-width:100%; color:#f0e2c6; background:#171a13; border:1px solid #ac8b55; border-radius:3px; box-shadow:inset 0 2px 6px #0008;
+}
+select:not(:where(#market-dialog *)) { min-height:44px; font:inherit; }
+:is(.inventory-categories,.quest-tabs,.message-tabs,.raid-tabs,.map-view-switch,.auth-choices) button[aria-pressed='true'], .raid-tabs button[aria-selected='true'] {
+  background:linear-gradient(#69532f,#3c2d1d); border-color:#e4c482; color:#fff0ca; box-shadow:inset 0 0 0 2px #3b2d1b,inset 0 -3px #c9a86a;
+}
+/* Registres du domaine, sans déplacer les six bâtiments ou le repère mondial. */
+#player-screen > :is(h2,h3), #player-screen > section > h3 {
+  color:#edcf93; border-bottom:2px double #927347; background:var(--realm-wood-fill);
+  padding:.7rem 1rem; text-shadow:0 2px #000; box-shadow:inset 0 0 0 2px #1a1710;
+}
+#social-navigation { padding:.8rem; border:1px solid #9b7945; background:var(--realm-wood-fill); box-shadow:inset 0 0 0 3px #14150e; }
+#social-navigation button { flex:1 1 7rem; }
+#player-screen > dl.stats { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.65rem; }
+#player-screen > dl.stats > div {
+  display:flex; flex-direction:column; align-items:flex-start; padding:.8rem 1rem; min-width:0;
+  color:var(--realm-ink); background:var(--realm-paper-fill); border:1px solid #a38755; box-shadow:0 3px 6px #0004;
+}
+#player-screen > dl.stats dt { color:#604a30; font-size:.8rem; }
+#player-screen > dl.stats dd { margin-top:.35rem; color:#382b1c; font-size:1.1rem; font-weight:600; text-align:left; font-variant-numeric:tabular-nums; }
+.population-details, .expedition-notice, .raid-panel { padding:1rem; background:var(--realm-wood-fill); border:1px solid #9b7f4d; }
+.domain-map-container, .armorique-map-container { outline:2px solid #987644; outline-offset:2px; box-shadow:0 8px 22px #0008; }
+.armorique-accessible-controls { padding:.8rem; background:var(--realm-wood-fill); border:1px solid #8b7042; }
+/* Atelier et fiches militaires : même structure, deux matériaux distincts. */
+.realm-paper, .building-card, .expedition-unit, .expedition-destination, .expedition-result, .quest-npc-text, #quest-details, .social-profile-details {
+  --text:#352719; --muted:#604a30; --accent:#705025;
+  color:var(--realm-ink); background:var(--realm-paper-fill); border:1px solid #a0804a; box-shadow:0 4px 10px #0005;
+}
+.building-card :is(h4,p), .expedition-unit :is(h4,p,strong), .expedition-destination :is(h3,p), .expedition-result p, #quest-details :is(h3,p,li), .social-profile-details :is(dt,dd,span) { color:var(--realm-ink); }
+.building-card h4 { border-bottom:1px solid #9a794e66; padding-bottom:.6rem; font-size:1.3rem; }
+.building-card.army-card { background:linear-gradient(#18211be8,#141e18ef),var(--realm-metal) center / cover; color:#f0e1c4; --text:#f0e1c4; --muted:#d0c1a2; }
+.building-card.army-card :is(h4,p) { color:#e6d5b4; }
+.army-panel > .stats { padding:.6rem 1rem; background:var(--realm-wood-fill); border:1px solid #a1814a; }
+.recruitment-list li { padding:.75rem; margin-bottom:.5rem; border:1px solid #8e7143; background:#162016; }
+.workforce-controls button, .army-quantity button { flex-shrink:0; }
+/* Coffre : étoffe et alvéoles, 30 emplacements et interactions conservés. */
+#inventory-dialog { background:linear-gradient(#201b14d9,#17180fef),var(--realm-linen) center / cover; }
+.inventory-dialog .inventory-slot { background:linear-gradient(#141b12d9,#0c130cde),var(--realm-linen) center / cover; border-color:#a68c58; box-shadow:inset 0 2px 9px #0009,inset 0 0 0 2px #2f2c1b; }
+.inventory-dialog .inventory-slot button { background:transparent; box-shadow:none; border:0; }
+.inventory-item-quantity { color:#fff0c9; background:#1b2418; border:1px solid #b49353; border-radius:3px; }
+.inventory-equipment { background:var(--realm-wood-fill); border-color:#a0804a; }
+.inventory-active-effects, .inventory-pending-rewards { padding:.8rem; border:1px solid #957847; background:#162018d9; }
+dialog.inventory-potion-detail { --muted:#604a30; --text:#352719; background:var(--realm-paper-fill); color:var(--realm-ink); }
+.inventory-potion-detail :is(h3,p) { color:var(--realm-ink); }
+/* Correspondance : lettres claires, contenant en bois, textes réels conservés. */
+#message-list .private-message-row, #message-list .private-message-row:hover:not(:disabled), #message-reading {
+  color:var(--realm-ink); background:var(--realm-paper-fill); border-color:#aa8a50; text-shadow:none; box-shadow:0 3px 6px #0005;
+}
+#message-list .private-message-row :is(span,time,strong), #message-reading :is(p,h3) { color:#49371f; }
+#message-list .private-message-row.is-unread { border-left:4px solid #b18b3f; }
+.message-attachment-reader, .message-attachment-line { background:#ecd9b2; border-color:#98733f; color:#392a1a; }
+.message-attachment-picker .inventory-slot { background:var(--realm-wood-fill); border-color:#987747; }
+.message-attachment-picker .inventory-slot button { background:transparent; border:0; box-shadow:none; }
+/* Quêtes et expéditions : carnet d’aventure, sans activer le moteur. */
+#quest-list .quest-card { background:var(--realm-paper-fill); color:#382719; text-shadow:none; border-color:#a0804a; }
+#quest-list .quest-card :is(span,p,strong) { color:#49371f; }
+#quest-details { padding:1rem; }
+.quest-npc-text { color:#49371f; }
+.expedition-scope, .expedition-composition li { border-color:#9d7f49; background:var(--realm-wood-fill); }
+.expedition-timeline progress::-webkit-progress-value { background:linear-gradient(90deg,#385d2c,#a08a45); }
+/* Salle du conseil et foyer, pas de système d’alliance ajouté. */
+.raid-overview-card, .raid-battle-card { padding:1rem; border:1px solid #a1834e; background:linear-gradient(#172019e8,#111810ed),var(--realm-metal) center / cover; }
+.raid-tabs { border-bottom:1px solid #a0804a; padding-bottom:.8rem; }
+.tavern-stream { background:linear-gradient(#231b12e0,#191710e8),var(--realm-wood) center / cover; border-color:#b18a50; }
+.tavern-letter { border-bottom-color:#b2905b77; }
+.tavern-letter strong { color:#f0cf91; }
+.tavern-delete-confirm { background:#392419; border-color:#af794b; }
+#player-profile-dialog .social-profile-name { color:#352719; }
+#player-profile-dialog .social-profile-public-title { color:#705126; }
+.social-profile-details { padding:1rem; }
+/* Tous les états d’information, sans effacer le texte ni déplacer le focus. */
+.message:not(:where(#market-dialog *, .market-confirm *)):not(:empty) { padding:.7rem .9rem; border-left:3px solid #c3a16a; background:#192116dc; color:#e6d9bc; line-height:1.55; }
+.confirmation-actions { border-top:1px solid #a1814a; padding-top:1rem; }
+#confirmation-cancel { background:linear-gradient(#4d3327,#2b211b); color:#f1dfbc; }
+table:not(:where(#market-dialog *)) { border-collapse:collapse; color:var(--realm-ink); background:var(--realm-paper-fill); }
+table:not(:where(#market-dialog *)) :is(th,td) { padding:.65rem; border-bottom:1px solid #97734466; }
+@media(max-width:900px) { #player-screen > dl.stats { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media(max-width:540px) {
+  .brand { padding:1rem .5rem; background-size:auto 100%; }
+  .brand .introduction { font-size:.75rem; }
+  #player-screen > dl.stats { gap:.45rem; }
+  #player-screen > dl.stats > div { padding:.65rem; }
+  dialog:not(:where(#market-dialog,.market-confirm)) { border-image-width:8px; }
+  .confirmation-actions { flex-wrap:wrap; }
+  .social-profile-details { padding:.7rem; }
+}
+@media(prefers-reduced-motion:reduce) { .realm-window { scroll-behavior:auto; } }
