@@ -121,3 +121,9 @@
 !/assets/ui/stat-icons.svg
 !/css/dashboard-cards.css
 !/js/dashboard-cards.js
+
+!/assets/units/
+!/assets/units/archer.webp
+!/assets/units/fantassin.webp
+!/assets/units/eclaireur.webp
+!/css/ui-finishing.css

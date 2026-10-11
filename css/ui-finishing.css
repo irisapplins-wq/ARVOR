@@ -1,0 +1,96 @@
+/* Finitions visuelles uniquement : aucun état de jeu ni événement remplacé. */
+.brand {
+  box-sizing: border-box;
+  width: min(100%, 900px);
+  aspect-ratio: 3 / 1;
+  padding: 0;
+  margin-inline: auto;
+  container-type: inline-size;
+  background-size: 100% auto;
+  background-position: top center;
+}
+.brand .ornament { display: none; }
+.brand h1, .brand .subtitle, .brand .introduction {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  text-align: center;
+}
+.brand h1 {
+  top: 43%;
+  transform: translateY(-50%);
+  font-size: clamp(1.4rem, 8.4cqw, 4.7rem);
+  line-height: .9;
+  padding-left: .1em;
+}
+.brand .subtitle {
+  top: 62%;
+  transform: translateY(-50%);
+  font-size: clamp(.72rem, 2.3cqw, 1.25rem);
+  line-height: 1.1;
+}
+.brand .introduction {
+  top: 88%;
+  font-size: clamp(.6rem, 2.1cqw, .875rem);
+  line-height: 1.1;
+}
+
+:is(#armorique-domain-choice, #armorique-location-choice, #armorique-frontier-choice) {
+  appearance: none;
+  color-scheme: dark;
+  color: #f1e3c5;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='12' viewBox='0 0 16 12'%3E%3Cpath d='M3 4l5 5 5-5' fill='none' stroke='%23c5a66c' stroke-width='2'/%3E%3C/svg%3E") right .75rem center / 16px 12px no-repeat, linear-gradient(#34271b, #211a13);
+  border: 1px solid #ac8b55;
+  padding-right: 2.5rem;
+  min-height: 44px;
+}
+:is(#armorique-domain-choice, #armorique-location-choice, #armorique-frontier-choice):hover:not(:disabled) { border-color: #dec185; }
+:is(#armorique-domain-choice, #armorique-location-choice, #armorique-frontier-choice):focus-visible { outline: 2px solid #dec185; outline-offset: 3px; }
+:is(#armorique-domain-choice, #armorique-location-choice, #armorique-frontier-choice):disabled { color: #b8aa90; opacity: .65; cursor: not-allowed; }
+:is(#armorique-domain-choice, #armorique-location-choice, #armorique-frontier-choice) option { color: #f1e3c5; background: #2b2118; }
+:is(#armorique-domain-choice, #armorique-location-choice, #armorique-frontier-choice) option:checked { color: #fff0ca; background: #29402b; }
+
+/* Portrait sous le titre, dans la colonne droite des données militaires. */
+.army-card[data-unit-type] {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 50%);
+  column-gap: .65rem;
+  align-content: start;
+}
+.army-card[data-unit-type] h4 { grid-column: 1 / -1; grid-row: 1; }
+.army-card[data-unit-type] p { margin-block: .45rem; }
+.army-card[data-unit-type] p:nth-of-type(1) { grid-column: 1; grid-row: 2; }
+.army-card[data-unit-type] p:nth-of-type(2) { grid-column: 1; grid-row: 3; }
+.army-card[data-unit-type] p:nth-of-type(3) { grid-column: 1; grid-row: 4; }
+.army-card[data-unit-type] p:nth-of-type(4) { grid-column: 1; grid-row: 5; clear: none; }
+.army-card[data-unit-type] p:nth-of-type(5) { grid-column: 1 / -1; grid-row: 6; }
+.army-card[data-unit-type] > label,
+.army-card[data-unit-type] > .army-quantity,
+.army-card[data-unit-type] > button { grid-column: 1 / -1; }
+.army-card[data-unit-type]::before {
+  position: static;
+  inset: auto;
+  float: none;
+  grid-column: 2;
+  grid-row: 2 / 6;
+  justify-self: end;
+  align-self: start;
+  width: min(100%, 180px);
+  aspect-ratio: 5 / 6;
+  height: auto;
+  margin: .45rem 0 0;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  border-radius: 0;
+  box-shadow: none;
+  opacity: 1;
+  mask-image: linear-gradient(to right, transparent, #000 7%, #000 96%, transparent), linear-gradient(to bottom, #000 85%, transparent);
+  mask-composite: intersect;
+}
+.army-card[data-unit-type='archer']::before { background-image: url('../assets/units/archer.webp'); }
+.army-card[data-unit-type='infantry']::before { background-image: url('../assets/units/fantassin.webp'); }
+.army-card[data-unit-type='scout']::before { background-image: url('../assets/units/eclaireur.webp'); }
+@media (max-width: 540px) { .brand { padding: 0; } }
