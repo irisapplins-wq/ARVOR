@@ -7,6 +7,8 @@
   <title>ARVOR — Les Terres d’Armorique</title>
   <link rel="stylesheet" href="css/style.css?v=potion-market-20261010">
   <link rel="stylesheet" href="css/realm-ui.css?v=realm-20261011">
+  <link rel="stylesheet" href="css/dashboard-cards.css?v=dashboard-20261011">
+  <script src="js/dashboard-cards.js?v=dashboard-20261011" defer></script>
   <link rel="stylesheet" href="css/market-pilot.css?v=relooking-pilot-20261011">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
   <script src="js/supabase.js" defer></script>
@@ -87,13 +89,13 @@
         <h2 id="player-welcome"></h2>
         <h3 id="domain-name"></h3>
         <dl class="stats">
-          <div><dt>Développement</dt><dd id="domain-stage"></dd></div>
-          <div><dt>Population</dt><dd id="domain-population"></dd></div>
-          <div><dt>Travailleurs</dt><dd id="population-workers"></dd></div>
-          <div><dt>Recrues</dt><dd id="population-recruits"></dd></div>
-          <div><dt>Soldats</dt><dd id="population-soldiers"></dd></div>
-          <div><dt>Disponibles</dt><dd id="population-available"></dd></div>
-          <div><dt>Puissance</dt><dd id="domain-power"></dd></div>
+          <div class="dashboard-card"><svg class="dashboard-icon" aria-hidden="true" focusable="false"><use href="assets/ui/stat-icons.svg#castle"></use></svg><dt>Développe&shy;ment</dt><dd id="domain-stage"></dd></div>
+          <div class="dashboard-card"><svg class="dashboard-icon" aria-hidden="true" focusable="false"><use href="assets/ui/stat-icons.svg#people"></use></svg><dt>Population</dt><dd id="domain-population"></dd></div>
+          <div class="dashboard-card"><svg class="dashboard-icon" aria-hidden="true" focusable="false"><use href="assets/ui/stat-icons.svg#tools"></use></svg><dt>Travailleurs</dt><dd id="population-workers"></dd></div>
+          <div class="dashboard-card"><svg class="dashboard-icon" aria-hidden="true" focusable="false"><use href="assets/ui/stat-icons.svg#helmet"></use></svg><dt>Recrues</dt><dd id="population-recruits"></dd></div>
+          <div class="dashboard-card"><svg class="dashboard-icon" aria-hidden="true" focusable="false"><use href="assets/ui/stat-icons.svg#swords"></use></svg><dt>Soldats</dt><dd id="population-soldiers"></dd></div>
+          <div class="dashboard-card"><svg class="dashboard-icon" aria-hidden="true" focusable="false"><use href="assets/ui/stat-icons.svg#person"></use></svg><dt>Disponibles</dt><dd id="population-available"></dd></div>
+          <div class="dashboard-card"><svg class="dashboard-icon" aria-hidden="true" focusable="false"><use href="assets/ui/stat-icons.svg#shield"></use></svg><dt>Puissance</dt><dd id="domain-power"></dd></div>
         </dl>
         <div class="population-details" aria-live="polite" aria-atomic="true">
           <p id="population-rates"></p>
@@ -102,11 +104,11 @@
         </div>
         <h3>Ressources</h3>
         <dl class="stats">
-          <div><dt>🌾 Vivres</dt><dd id="resource-food"></dd></div>
-          <div><dt>🪵 Bois</dt><dd id="resource-wood"></dd></div>
-          <div><dt>🪨 Pierre</dt><dd id="resource-stone"></dd></div>
-          <div><dt>⛓️ Fer</dt><dd id="resource-iron"></dd></div>
-          <div><dt>🪙 Pièces</dt><dd id="resource-coins"></dd></div>
+          <div class="dashboard-card dashboard-storage"><img class="dashboard-icon" src="assets/market/food.svg" alt="" width="64" height="64" decoding="async"><dt>Vivres</dt><dd id="resource-food"></dd><progress class="dashboard-storage-bar" max="1" value="0" aria-label="Remplissage du stockage : Vivres" hidden></progress></div>
+          <div class="dashboard-card dashboard-storage"><img class="dashboard-icon" src="assets/market/wood.svg" alt="" width="64" height="64" decoding="async"><dt>Bois</dt><dd id="resource-wood"></dd><progress class="dashboard-storage-bar" max="1" value="0" aria-label="Remplissage du stockage : Bois" hidden></progress></div>
+          <div class="dashboard-card dashboard-storage"><img class="dashboard-icon" src="assets/market/stone.svg" alt="" width="64" height="64" decoding="async"><dt>Pierre</dt><dd id="resource-stone"></dd><progress class="dashboard-storage-bar" max="1" value="0" aria-label="Remplissage du stockage : Pierre" hidden></progress></div>
+          <div class="dashboard-card dashboard-storage"><img class="dashboard-icon" src="assets/market/iron.svg" alt="" width="64" height="64" decoding="async"><dt>Fer</dt><dd id="resource-iron"></dd><progress class="dashboard-storage-bar" max="1" value="0" aria-label="Remplissage du stockage : Fer" hidden></progress></div>
+          <div class="dashboard-card"><img class="dashboard-icon" src="assets/market/coins.svg" alt="" width="64" height="64" decoding="async"><dt>Pièces</dt><dd id="resource-coins"></dd></div>
         </dl>
         <nav class="map-view-switch" aria-label="Vue de la carte">
           <button id="show-domain-view" type="button" aria-pressed="true" aria-controls="domain-view">Vue du domaine</button>

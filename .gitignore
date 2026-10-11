@@ -116,3 +116,8 @@
 !/js/supabase.js
 !/js/tavern.js
 !/js/world-grid-diagnostic.js
+
+!/assets/ui/
+!/assets/ui/stat-icons.svg
+!/css/dashboard-cards.css
+!/js/dashboard-cards.js

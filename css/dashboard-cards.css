@@ -1,0 +1,38 @@
+/* Uniquement les douze cartes du tableau de bord. */
+#player-screen > dl.stats > .dashboard-card {
+  display:grid; grid-template-columns:clamp(40px,5vw,64px) minmax(0,1fr);
+  column-gap:.8rem; row-gap:.2rem; align-items:center;
+  padding:.8rem 1rem;
+}
+#player-screen > dl.stats .dashboard-icon {
+  grid-column:1; grid-row:1 / 3; width:100%; height:64px;
+  object-fit:contain; filter:drop-shadow(0 2px 2px #51361e40);
+}
+#player-screen > dl.stats .dashboard-card dt {
+  grid-column:2; align-self:end; font-family:Georgia,serif;
+  font-size:1rem; font-weight:600; line-height:1.2; min-width:0; overflow-wrap:anywhere; hyphens:auto;
+}
+#player-screen > dl.stats .dashboard-card dd {
+  grid-column:2; align-self:start; margin:0; font-family:Georgia,serif;
+  font-size:clamp(1.5rem,2.2vw,2rem); line-height:1.15; overflow-wrap:anywhere;
+}
+#player-screen > dl.stats .dashboard-storage dd { font-size:clamp(1.25rem,1.9vw,1.75rem); }
+.dashboard-stock-warning { display:block; margin-top:.3rem; font:600 .8rem/1.2 Georgia,serif; color:#74351d; }
+#player-screen > dl.stats .dashboard-card.is-storage-full { border-color:#875325; box-shadow:inset 0 0 0 1px #a4713c,0 3px 6px #0004; }
+#player-screen .dashboard-storage-bar {
+  grid-column:1 / -1; appearance:none; display:block; width:100%; height:7px;
+  margin-top:.35rem; overflow:hidden; border:1px solid #9a7c4f; border-radius:4px;
+  background:#b69b7066; accent-color:#436336;
+}
+#player-screen .dashboard-storage-bar::-webkit-progress-bar { background:#b69b7066; }
+#player-screen .dashboard-storage-bar::-webkit-progress-value { background:linear-gradient(90deg,#29492b,#738349); border-radius:3px; }
+#player-screen .dashboard-storage-bar::-moz-progress-bar { background:#436336; }
+#player-screen .is-storage-full .dashboard-storage-bar::-webkit-progress-value { background:linear-gradient(90deg,#875325,#b48737); }
+#player-screen .is-storage-full .dashboard-storage-bar::-moz-progress-bar { background:#a27130; }
+@media(max-width:540px) {
+  #player-screen > dl.stats > .dashboard-card { grid-template-columns:30px minmax(0,1fr); gap:.25rem .35rem; padding:.65rem; }
+  #player-screen > dl.stats .dashboard-icon { height:44px; grid-row:2; }
+  #player-screen > dl.stats .dashboard-card dt { font-size:.85rem; grid-column:1 / -1; grid-row:1; }
+  #player-screen > dl.stats .dashboard-card dd { font-size:1.3rem; }
+  #player-screen > dl.stats .dashboard-storage dd { font-size:1.12rem; }
+}
