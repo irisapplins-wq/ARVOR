@@ -318,8 +318,11 @@
             (armoriqueMarker.dataset.positionReady && x === parseFloat(armoriqueMarker.style.left) && y === parseFloat(armoriqueMarker.style.top))) throw new Error('hidden');
         points.add(point);
       }
+      // Masquage visuel uniquement : les données et autorisations serveur restent inchangées.
+      const displayedDomains = data.filter(d => !(d.domain_name.trim().toUpperCase() === 'DAOULAS'
+        && Number(d.x) === 31 && Number(d.y) === 64));
       const fragment = document.createDocumentFragment(), choice = element('armorique-domain-choice');
-      for (const d of data) {
+      for (const d of displayedDomains) {
         const marker = document.createElement('button'); marker.type = 'button';
         marker.className = 'armorique-foreign-domain'; marker.dataset.point = Number(d.x) + ',' + Number(d.y);
         marker.style.left = Number(d.x) + '%'; marker.style.top = Number(d.y) + '%';
@@ -328,7 +331,7 @@
         marker.addEventListener('click', () => showWorldDomain(d)); fragment.append(marker);
         choice.add(new Option(marker.title, marker.dataset.point));
       }
-      worldDomainLayer.replaceChildren(fragment); choice.disabled = data.length === 0;
+      worldDomainLayer.replaceChildren(fragment); choice.disabled = displayedDomains.length === 0;
       void window.arvor?.raids?.refresh();
     } catch {
       if (current()) worldDomainMessage.textContent = 'Domaines découverts indisponibles pour le moment.';
