@@ -6,7 +6,7 @@
   <meta name="description" content="ARVOR — Les Terres d’Armorique, jeu de stratégie multijoueur persistant.">
   <title>ARVOR — Les Terres d’Armorique</title>
   <link rel="stylesheet" href="css/style.css?v=header-20261012">
-  <link rel="stylesheet" href="css/realm-ui.css?v=header-20261012">
+  <link rel="stylesheet" href="css/realm-ui.css?v=quest-journal-20261012">
   <link rel="stylesheet" href="css/dashboard-cards.css?v=dashboard-icons-20261012">
   <script src="js/dashboard-cards.js?v=dashboard-20261011" defer></script>
   <link rel="stylesheet" href="css/ui-finishing.css?v=header-20261012">
@@ -23,7 +23,7 @@
   <script src="js/quest-items.js?v=quest-catalog-20261010" defer></script>
   <script src="js/inventory.js?v=quest-catalog-20261010" defer></script>
   <script src="js/potion-rewards.js?v=expedition-potions-20261010" defer></script>
-  <script src="js/quests.js?v=quest-illustrated-20261012" defer></script>
+  <script src="js/quests.js?v=quest-journal-20261012" defer></script>
   <script src="js/market.js?v=potion-market-20261010" defer></script>
   <script src="js/potion-market.js?v=potion-market-20261010" defer></script>
   <script src="js/raid-departure.js?v=pvp-phase10-20261010" defer></script>
@@ -262,9 +262,9 @@
   <dialog id="quest-dialog" class="confirmation-dialog quest-dialog" aria-labelledby="quest-title">
     <header class="quest-heading"><div><p class="inventory-kicker">Les récits d’Armorique</p><h2 id="quest-title">Journal de quêtes</h2></div><button id="quest-close" type="button">✕ Fermer</button></header>
     <p id="quest-notice" class="message" role="status" aria-live="polite"></p>
-    <nav class="quest-tabs" aria-label="Quêtes"><button type="button" data-quest-tab="AVAILABLE" aria-pressed="true">Disponibles</button><button type="button" data-quest-tab="ACTIVE" aria-pressed="false">En cours</button><button type="button" data-quest-tab="COMPLETED" aria-pressed="false">Terminées</button></nav>
+    <nav class="quest-tabs" aria-label="Catégories de quêtes"><button type="button" data-quest-category="principale" aria-pressed="true">Quêtes principales</button><button type="button" data-quest-category="secondaire" aria-pressed="false">Quêtes secondaires</button></nav>
     <div class="quest-layout"><section id="quest-list" aria-label="Liste des quêtes"></section><article id="quest-details" aria-label="Détails de la quête"></article></div>
-    <button id="quest-refresh" type="button">Actualiser le journal</button>
+    <footer class="quest-journal-footer"><button id="quest-refresh" type="button" aria-label="Actualiser le journal">↻ Actualiser</button></footer>
   </dialog>
   <dialog id="quest-npc-dialog" class="confirmation-dialog quest-npc-dialog" aria-labelledby="quest-npc-title">
     <header class="quest-heading"><h2 id="quest-npc-title">Dialogue</h2><button id="quest-npc-close" type="button">✕ Fermer</button></header>

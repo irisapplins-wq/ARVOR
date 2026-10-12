@@ -11,6 +11,48 @@
   --realm-paper-fill: linear-gradient(#f6e3ba33,#f6e3ba33),var(--realm-paper) center / 100% 100%;
   --realm-button-fill: linear-gradient(#364e2b,#182c1b);
 }
+
+/* Journal : mêmes bois, parchemin et cadre ; hiérarchie limitée à cette fenêtre. */
+#quest-dialog .quest-heading { padding: .85rem 1rem; gap: .75rem; }
+#quest-dialog .quest-tabs { gap: .7rem; margin-block: 1rem; }
+#quest-dialog .quest-tabs button { display:flex; align-items:center; justify-content:center; min-height:48px; padding:.7rem; }
+#quest-dialog .quest-layout { grid-template-columns:minmax(210px, .95fr) minmax(0, 2fr); gap:1.15rem; align-items:start; }
+#quest-dialog #quest-list { gap:1rem; }
+#quest-dialog .quest-list-group { display:grid; gap:.5rem; min-width:0; }
+#quest-dialog .quest-list-group h3,
+#quest-dialog .quest-list-group summary { margin:0; padding:.4rem .2rem; font-size:.9rem; color:#e4cc98; }
+#quest-dialog .quest-list-group summary { cursor:pointer; min-height:44px; box-sizing:border-box; display:list-item; }
+#quest-dialog .quest-card { display:flex; flex-direction:column; align-items:flex-start; gap:.45rem; padding:.8rem; margin:0; }
+#quest-dialog .quest-card strong { font-size:.92rem; line-height:1.4; }
+#quest-dialog .quest-card-state { font-size:.78rem; line-height:1.3; }
+#quest-dialog .quest-card[aria-pressed='true'] { outline:1px solid #e4c482; outline-offset:1px; box-shadow:inset 3px 0 #dbb877; }
+#quest-dialog #quest-details { padding:clamp(1rem,2vw,1.7rem); min-width:0; }
+#quest-dialog #quest-details h3 { margin:0 0 .85rem; font-size:clamp(1.2rem,2.4vw,1.6rem); line-height:1.4; }
+#quest-dialog #quest-details h4 { margin:1.15rem 0 .65rem; }
+#quest-dialog .quest-narrative { line-height:1.7; }
+#quest-dialog .quest-state { display:inline-block; padding:.35rem .65rem; border:1px solid #9b7c46; margin:.4rem 0; }
+#quest-dialog .quest-step-count { font-weight:600; }
+#quest-dialog .quest-objectives { list-style:none; padding:0; margin:0; display:grid; gap:.6rem; }
+#quest-dialog .quest-objectives li { display:flex; gap:.65rem; padding:.65rem .75rem; line-height:1.5; border-left:3px solid transparent; margin:0; }
+#quest-dialog .quest-objective-symbol { flex:0 0 1.1rem; font-weight:700; }
+#quest-dialog #quest-details .quest-done { color:#2e5931; }
+#quest-dialog .quest-current { border-left-color:#8f6530; background:#ad894c25; font-weight:600; }
+#quest-dialog .quest-future { opacity:.78; }
+#quest-dialog .quest-rewards { line-height:1.6; }
+#quest-dialog .quest-primary-action { min-height:48px; padding:.7rem 1rem; }
+#quest-dialog .quest-secondary-actions { display:flex; flex-wrap:wrap; gap:.5rem; margin-top:.6rem; }
+#quest-dialog .quest-secondary-actions button,
+#quest-dialog #quest-refresh { box-shadow:none; font-size:.8rem; min-height:44px; padding:.5rem .7rem; }
+#quest-dialog .quest-journal-footer { display:flex; justify-content:flex-end; margin-top:1rem; }
+@media(max-width:700px) {
+  #quest-dialog .quest-layout { grid-template-columns:minmax(0,1fr); }
+  #quest-dialog #quest-list { max-height:17rem; overflow-y:auto; padding:.2rem; }
+  #quest-dialog .quest-tabs button { font-size:.85rem; min-width:0; }
+  #quest-dialog .quest-heading { padding:.65rem; }
+  #quest-dialog .quest-heading h2 { font-size:1.2rem; }
+  #quest-dialog .quest-heading .inventory-kicker { font-size:.65rem; }
+  #quest-dialog .quest-primary-action { width:100%; }
+}
 body { background:radial-gradient(ellipse at 50% 0,#78532233,transparent 50%),linear-gradient(#0c110eeb,#0c110ef2),var(--realm-wood) center / 768px auto; }
 .welcome { padding-inline:clamp(.5rem,2vw,1.5rem); }
 /* Même matériau pour tous les vrais panneaux ; aucune boîte décorative dans le DOM. */
