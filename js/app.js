@@ -411,6 +411,7 @@
       const choice = element('armorique-location-choice');
       for (const location of data) choice.add(new Option(location.name, location.code));
       choice.disabled = data.length === 0;
+      void window.arvor?.questMap?.refresh();
     } catch {
       if (current()) locationMessage.textContent = 'Lieux découverts indisponibles pour le moment.';
     }
@@ -421,7 +422,7 @@
     armoriqueView.hidden = !world;
     element('show-domain-view').setAttribute('aria-pressed', String(!world));
     element('show-armorique-view').setAttribute('aria-pressed', String(world));
-    if (world && userId && domainId) { void refreshExpeditionMap(); void synchronizeExpedition(); }
+    if (world && userId && domainId) { void refreshExpeditionMap(); void synchronizeExpedition(); void window.arvor?.questMap?.refresh(); }
   }
   element('show-domain-view').addEventListener('click', () => selectMapView(false));
   element('show-armorique-view').addEventListener('click', () => selectMapView(true));
@@ -2388,6 +2389,7 @@
     window.arvor?.inventory?.setUser(userId);
     window.arvor?.potionRewards?.setUser(userId);
     window.arvor?.quests?.setUser(userId);
+    window.arvor?.questMap?.setUser(userId);
     window.arvor?.market?.setUser(userId);
     window.arvor?.potionMarket?.setUser(userId);
     window.arvor?.registration?.setSession(session);

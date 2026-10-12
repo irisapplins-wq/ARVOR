@@ -183,6 +183,8 @@
 !/js/npc-characters.js
 !/js/npc-dialogue.js
 !/js/npc-dialogue-access.js
+!/js/quest-map-objectives.js
+!/css/quest-map-objectives.css
 !/assets/images/pnj/optimized/merlin/merlin_accueil.webp
 !/assets/images/pnj/optimized/merlin/merlin_conseil_parchemin.webp
 !/assets/images/pnj/optimized/merlin/merlin_remise_parchemin.webp

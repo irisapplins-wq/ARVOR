@@ -37,6 +37,7 @@
     const ids = new Set();
     for (const q of data.quests) { if (!q || typeof q.id !== 'string' || ids.has(q.id) || !labels[q.state] || !Array.isArray(q.objectives) || !q.rewards) throw Error('Réponse invalide'); ids.add(q.id); }
     enabled = data.enabled; list = enabled ? data.quests : [];
+    void window.arvor?.questMap?.refresh();
     selected = list.find(q => q.id === selected?.id) || null;
   }
   function rewardText(q) {
