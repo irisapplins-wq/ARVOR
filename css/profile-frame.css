@@ -1,0 +1,57 @@
+/* Pilote graphique : aucune autre fenêtre ne reçoit ce cadre. */
+#player-profile-dialog {
+  --profile-corner: 50px;
+  --profile-band: 18px;
+  --profile-inset: 54px;
+  border-image: none;
+  border: 1px solid #9b7945;
+  border-radius: 0;
+  padding: var(--profile-inset);
+  overflow: hidden;
+}
+#player-profile-dialog[open] { display: flex; flex-direction: column; }
+#player-profile-dialog .profile-frame-content {
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-color: #a38a56 #18160f;
+}
+#player-profile-dialog .profile-frame-decoration {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  user-select: none;
+  z-index: 4;
+}
+#player-profile-dialog .profile-frame-decoration > span { position: absolute; pointer-events: none; }
+#player-profile-dialog .profile-frame-edge { background-repeat: repeat; }
+#player-profile-dialog .profile-frame-top,
+#player-profile-dialog .profile-frame-bottom {
+  left: 0; right: 0; height: var(--profile-band);
+  background-repeat: repeat-x; background-size: auto var(--profile-band);
+}
+#player-profile-dialog .profile-frame-top { top: 0; background-image: url('../assets/relooking/profile-frame/edge-top.webp'); }
+#player-profile-dialog .profile-frame-bottom { bottom: 0; background-image: url('../assets/relooking/profile-frame/edge-bottom.webp'); }
+#player-profile-dialog .profile-frame-left,
+#player-profile-dialog .profile-frame-right {
+  top: 0; bottom: 0; width: var(--profile-band);
+  background-repeat: repeat-y; background-size: var(--profile-band) auto;
+}
+#player-profile-dialog .profile-frame-left { left: 0; background-image: url('../assets/relooking/profile-frame/edge-left.webp'); }
+#player-profile-dialog .profile-frame-right { right: 0; background-image: url('../assets/relooking/profile-frame/edge-right.webp'); }
+#player-profile-dialog .profile-frame-corner {
+  width: var(--profile-corner); height: var(--profile-corner);
+  background-repeat: no-repeat; background-size: contain;
+}
+#player-profile-dialog .profile-frame-tl { top: 0; left: 0; background-position: top left; background-image: url('../assets/relooking/profile-frame/corner-top-left.webp'); }
+#player-profile-dialog .profile-frame-tr { top: 0; right: 0; background-position: top right; background-image: url('../assets/relooking/profile-frame/corner-top-right.webp'); }
+#player-profile-dialog .profile-frame-bl { bottom: 0; left: 0; background-position: bottom left; background-image: url('../assets/relooking/profile-frame/corner-bottom-left.webp'); }
+#player-profile-dialog .profile-frame-br { bottom: 0; right: 0; background-position: bottom right; background-image: url('../assets/relooking/profile-frame/corner-bottom-right.webp'); }
+#player-profile-dialog::after { content: none; }
+@media (max-width: 540px) {
+  #player-profile-dialog {
+    --profile-corner: 36px;
+    --profile-band: 12px;
+    --profile-inset: 40px;
+  }
+}

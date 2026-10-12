@@ -152,3 +152,22 @@
 !/assets/ui/dashboard-icons/coins.webp
 
 !/assets/relooking/shared/arvor-header.webp
+
+!/css/profile-frame.css
+!/assets/relooking/profile-frame/
+!/assets/relooking/profile-frame/corner-top-left.webp
+!/assets/relooking/profile-frame/corner-top-right.webp
+!/assets/relooking/profile-frame/corner-bottom-left.webp
+!/assets/relooking/profile-frame/corner-bottom-right.webp
+!/assets/relooking/profile-frame/edge-top.webp
+!/assets/relooking/profile-frame/edge-bottom.webp
+!/assets/relooking/profile-frame/edge-left.webp
+!/assets/relooking/profile-frame/edge-right.webp
+
+!/assets/relooking/noble-frame/
+!/css/realm-frames.css
+!/js/realm-frames.js
+!/assets/relooking/noble-frame/corner-top-left.webp
+!/assets/relooking/noble-frame/corner-top-right.webp
+!/assets/relooking/noble-frame/corner-bottom-left.webp
+!/assets/relooking/noble-frame/corner-bottom-right.webp

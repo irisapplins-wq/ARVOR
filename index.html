@@ -12,6 +12,8 @@
   <link rel="stylesheet" href="css/ui-finishing.css?v=header-20261012">
   <link rel="stylesheet" href="css/market-pilot.css?v=relooking-pilot-20261011">
   <link rel="stylesheet" href="css/typography.css?v=header-20261012">
+  <link rel="stylesheet" href="css/profile-frame.css?v=profile-frame-20261012">
+  <link rel="stylesheet" href="css/realm-frames.css?v=realm-frames-20261012">
   <script src="js/typography-labels.js?v=cinzel-secondary-20261011" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
   <script src="js/supabase.js" defer></script>
@@ -30,6 +32,7 @@
   <script src="js/domain-solar.js?v=royaume-vivant-20261010" defer></script>
   <script src="js/domain-ambience.js?v=royaume-vivant-20261010" defer></script>
   <script src="js/app.js?v=world-domain-display-20261012" defer></script>
+  <script src="js/realm-frames.js?v=realm-frames-20261012" defer></script>
 </head>
 <body>
   <main class="welcome">
@@ -333,6 +336,13 @@
   </dialog>
 
   <dialog id="player-profile-dialog" class="confirmation-dialog social-dialog" aria-labelledby="player-profile-title">
+    <div class="profile-frame-decoration" aria-hidden="true">
+      <span class="profile-frame-edge profile-frame-top"></span><span class="profile-frame-edge profile-frame-bottom"></span>
+      <span class="profile-frame-edge profile-frame-left"></span><span class="profile-frame-edge profile-frame-right"></span>
+      <span class="profile-frame-corner profile-frame-tl"></span><span class="profile-frame-corner profile-frame-tr"></span>
+      <span class="profile-frame-corner profile-frame-bl"></span><span class="profile-frame-corner profile-frame-br"></span>
+    </div>
+    <div class="profile-frame-content">
     <div class="social-dialog-header">
       <h2 id="player-profile-title">Profils d’Armorique</h2>
       <button id="player-profile-close" type="button" aria-label="Fermer les profils">Fermer</button>
@@ -370,6 +380,7 @@
       <p id="player-search-message" class="message" role="status" aria-live="polite"></p>
       <ul id="player-search-results" class="social-search-results" aria-label="Joueurs trouvés"></ul>
     </section>
+    </div>
   </dialog>
 
   <dialog id="market-dialog" class="confirmation-dialog market-dialog" aria-labelledby="market-title">

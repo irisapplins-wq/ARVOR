@@ -1,0 +1,49 @@
+/* Décor uniquement ; les arrière-plans, dimensions et défilements natifs sont conservés. */
+.realm-frame:not(#player-profile-dialog) {
+  --frame-tl: url('../assets/relooking/profile-frame/corner-top-left.webp');
+  --frame-tr: url('../assets/relooking/profile-frame/corner-top-right.webp');
+  --frame-bl: url('../assets/relooking/profile-frame/corner-bottom-left.webp');
+  --frame-br: url('../assets/relooking/profile-frame/corner-bottom-right.webp');
+  --frame-top: url('../assets/relooking/profile-frame/edge-top.webp');
+  --frame-bottom: url('../assets/relooking/profile-frame/edge-bottom.webp');
+  --frame-left: url('../assets/relooking/profile-frame/edge-left.webp');
+  --frame-right: url('../assets/relooking/profile-frame/edge-right.webp');
+  --frame-corner-max: 44px;
+  --frame-corner-size: min(var(--frame-corner-max), var(--frame-safe-corner, 28px));
+  --frame-band-size: min(18px, var(--frame-safe-band, 10px));
+  border-image: none;
+  border-radius: 0;
+  background-image: var(--frame-tl), var(--frame-tr), var(--frame-bl), var(--frame-br), var(--frame-top), var(--frame-bottom), var(--frame-left), var(--frame-right), var(--frame-underlay);
+  background-position: left top, right top, left bottom, right bottom, center top, center bottom, left center, right center, var(--frame-underlay-position);
+  background-size: var(--frame-corner-size) auto, var(--frame-corner-size) auto, var(--frame-corner-size) auto, var(--frame-corner-size) auto, auto var(--frame-band-size), auto var(--frame-band-size), var(--frame-band-size) auto, var(--frame-band-size) auto, var(--frame-underlay-size);
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, repeat-x, repeat-x, repeat-y, repeat-y, var(--frame-underlay-repeat);
+  background-origin: border-box, border-box, border-box, border-box, border-box, border-box, border-box, border-box, var(--frame-underlay-origin);
+  background-clip: border-box, border-box, border-box, border-box, border-box, border-box, border-box, border-box, var(--frame-underlay-clip);
+  background-attachment: scroll;
+}
+.realm-frame.realm-frame-noble:not(#player-profile-dialog),
+.realm-frame.realm-frame-prestigious:not(#player-profile-dialog) {
+  --frame-tl: url('../assets/relooking/noble-frame/corner-top-left.webp');
+  --frame-tr: url('../assets/relooking/noble-frame/corner-top-right.webp');
+  --frame-bl: url('../assets/relooking/noble-frame/corner-bottom-left.webp');
+  --frame-br: url('../assets/relooking/noble-frame/corner-bottom-right.webp');
+  --frame-corner-max: 50px;
+}
+.realm-frame.realm-frame-compact:not(#player-profile-dialog) { --frame-corner-max: 32px; }
+.realm-frame.realm-frame-prestigious:not(#player-profile-dialog) { --frame-corner-max: 56px; }
+/* Le marché a un en-tête opaque et aucun padding extérieur : ses deux coins
+   supérieurs sont peints sur cet en-tête, sans déplacer son contenu. */
+#market-dialog.realm-frame > .market-header {
+  background-image: var(--frame-tl), var(--frame-tr), var(--frame-top), var(--frame-header-image);
+  background-position: left top, right top, center top, var(--frame-header-position);
+  background-size: var(--frame-corner-size) auto, var(--frame-corner-size) auto, auto var(--frame-band-size), var(--frame-header-size);
+  background-repeat: no-repeat, no-repeat, repeat-x, var(--frame-header-repeat);
+  background-origin: border-box;
+}
+.realm-frame:not(#player-profile-dialog) .realm-frame-sticky-header {
+  top: var(--frame-band-size);
+}
+@media (max-width: 540px) {
+  .realm-frame:not(#player-profile-dialog) { --frame-corner-max: 32px; }
+  .realm-frame.realm-frame-compact:not(#player-profile-dialog) { --frame-corner-max: 26px; }
+}
