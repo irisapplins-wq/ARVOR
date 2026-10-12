@@ -136,3 +136,17 @@
 !/assets/fonts/OFL-Cinzel-Decorative.txt
 !/css/typography.css
 !/js/typography-labels.js
+
+!/assets/ui/dashboard-icons/
+!/assets/ui/dashboard-icons/development.webp
+!/assets/ui/dashboard-icons/population.webp
+!/assets/ui/dashboard-icons/workers.webp
+!/assets/ui/dashboard-icons/recruits.webp
+!/assets/ui/dashboard-icons/soldiers.webp
+!/assets/ui/dashboard-icons/available.webp
+!/assets/ui/dashboard-icons/power.webp
+!/assets/ui/dashboard-icons/food.webp
+!/assets/ui/dashboard-icons/wood.webp
+!/assets/ui/dashboard-icons/stone.webp
+!/assets/ui/dashboard-icons/iron.webp
+!/assets/ui/dashboard-icons/coins.webp

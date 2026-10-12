@@ -1,11 +1,11 @@
 /* Uniquement les douze cartes du tableau de bord. */
 #player-screen > dl.stats > .dashboard-card {
-  display:grid; grid-template-columns:clamp(40px,5vw,64px) minmax(0,1fr);
+  display:grid; grid-template-columns:clamp(40px,5.7vw,72px) minmax(0,1fr);
   column-gap:.8rem; row-gap:.2rem; align-items:center;
   padding:.8rem 1rem;
 }
 #player-screen > dl.stats .dashboard-icon {
-  grid-column:1; grid-row:1 / 3; width:100%; height:64px;
+  grid-column:1; grid-row:1 / 3; width:100%; height:72px;
   object-fit:contain; filter:drop-shadow(0 2px 2px #51361e40);
 }
 #player-screen > dl.stats .dashboard-card dt {
@@ -35,4 +35,27 @@
   #player-screen > dl.stats .dashboard-card dt { font-size:.85rem; grid-column:1 / -1; grid-row:1; }
   #player-screen > dl.stats .dashboard-card dd { font-size:1.3rem; }
   #player-screen > dl.stats .dashboard-storage dd { font-size:1.12rem; }
+}
+
+/* Ressources uniquement : le tableau Développement conserve ses règles. */
+#player-screen > dl.dashboard-resources > .dashboard-card {
+  grid-template-columns:72px minmax(0,1fr);
+}
+#player-screen > dl.dashboard-resources .dashboard-icon { height:72px; }
+@media(max-width:900px) {
+  #player-screen > dl.dashboard-resources > .dashboard-card {
+    grid-template-columns:60px minmax(0,1fr);
+  }
+  #player-screen > dl.dashboard-resources .dashboard-icon { height:60px; }
+}
+@media(max-width:540px) {
+  /* Une carte par ligne laisse la place à l'illustration et au ratio lisible. */
+  #player-screen > dl.dashboard-resources { grid-template-columns:minmax(0,1fr); }
+  #player-screen > dl.dashboard-resources > .dashboard-card {
+    grid-template-columns:50px minmax(0,1fr);
+    column-gap:.7rem;
+  }
+  #player-screen > dl.dashboard-resources .dashboard-icon { height:50px; grid-row:2; }
+  #player-screen > dl.dashboard-resources .dashboard-card dd { align-self:center; grid-row:2; }
+  #player-screen > dl.dashboard-resources .dashboard-storage-bar { grid-row:3; }
 }
