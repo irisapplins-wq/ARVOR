@@ -47,3 +47,63 @@
   .realm-frame:not(#player-profile-dialog) { --frame-corner-max: 32px; }
   .realm-frame.realm-frame-compact:not(#player-profile-dialog) { --frame-corner-max: 26px; }
 }
+
+/* Boîte aux lettres : rythme intérieur, sans modifier les matériaux du cadre
+   ni les états et actions de la messagerie. */
+#messaging-dialog {
+  box-sizing: border-box;
+  padding: 1.5rem;
+  max-height: calc(100dvh - 2rem);
+}
+#messaging-dialog .messaging-header {
+  gap: .75rem;
+  padding: .8rem 1rem;
+  margin-bottom: 1rem;
+}
+#messaging-dialog #messaging-title {
+  margin: 0;
+  padding: 0;
+  border-bottom: 0;
+  line-height: 1.3;
+}
+#messaging-dialog #message-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .6rem;
+  margin-bottom: 1.1rem;
+  align-items: stretch;
+}
+#messaging-dialog #message-tabs button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 44px;
+  margin: 0;
+  padding: .55rem .65rem;
+  line-height: 1.25;
+  font-size: .9rem;
+  text-align: center;
+}
+#messaging-dialog #message-mailbox { gap: 1.1rem; }
+#messaging-dialog .message-list-pane { padding: .25rem; }
+#messaging-dialog .private-message-row { padding: .9rem 1rem; gap: .4rem; }
+#messaging-dialog #message-reading { padding: 1.1rem; }
+#messaging-dialog #message-compose { padding: .25rem; }
+#messaging-dialog .message-recipient-form { margin-bottom: 1rem; }
+#messaging-dialog .message-compose-form { gap: .65rem; }
+#messaging-dialog #message-recipient-selected:empty { display: none; }
+#messaging-dialog #message-subject,
+#messaging-dialog #message-body { min-width: 0; width: 100%; }
+#messaging-dialog #message-pending-access { width: auto; margin-block: .5rem .8rem; }
+@media (max-width: 40rem) {
+  #messaging-dialog { width: calc(100% - 1rem); padding: 1rem; max-height: calc(100dvh - 1rem); }
+  #messaging-dialog .messaging-header { padding: .75rem; gap: .5rem; }
+  #messaging-dialog #messaging-title { font-size: clamp(1.05rem, 4.5vw, 1.4rem); }
+  #messaging-dialog #message-tabs { gap: .4rem; margin-bottom: 1rem; }
+  #messaging-dialog #message-tabs button { padding: .5rem .2rem; font-size: .76rem; }
+  #messaging-dialog .private-message-row { padding: .8rem; }
+  #messaging-dialog #message-reading { padding: .8rem; }
+  #messaging-dialog .social-search-controls { flex-wrap: wrap; }
+  #messaging-dialog .social-search-controls input { flex: 1 1 9rem; min-width: 0; }
+}
