@@ -1,4 +1,6 @@
 .quest-map-objectives{position:absolute;inset:0;z-index:4;pointer-events:none}
-.quest-map-objective{position:absolute;transform:translate(-50%,-50%);width:44px;min-height:44px;margin:0;padding:0;pointer-events:auto;border:0;background:transparent;color:#f2ca65;font:bold 26px Georgia,serif;text-shadow:0 2px 2px #17120b,0 0 4px #352305;box-shadow:none}
+.quest-map-objective-group{position:absolute;transform:translate(-50%,-50%);display:flex;pointer-events:none}
+.quest-map-objective{position:relative;flex:0 0 44px;width:44px;min-height:44px;margin:0;padding:0;pointer-events:auto;border:0;background:transparent;color:#f2ca65;font:bold 26px Georgia,serif;text-shadow:0 2px 2px #17120b,0 0 4px #352305;box-shadow:none}
+.quest-map-objective.quest-map-expedition{color:#e97062;font-family:"Segoe UI Symbol",Georgia,serif}
 .quest-map-objective:hover,.quest-map-objective:focus-visible{background:#302818b3;outline:1px solid #d8b568;border-radius:50%}
 .quest-map-objective-notice:empty{display:none}
