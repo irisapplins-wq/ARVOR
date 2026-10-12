@@ -1,0 +1,82 @@
+#merlin-pilot, #merlin-pilot * { box-sizing: border-box; }
+#merlin-pilot button { min-height: 44px; padding: 10px 22px; border: 1px solid #b6995a; box-shadow: inset 0 0 0 3px #1c2318; color: #f1dfb8; background: linear-gradient(#364426, #182318); font-family: 'Cinzel Decorative', Georgia, serif; font-size: 15px; cursor: pointer; }
+#merlin-pilot button:hover { background: linear-gradient(#455432, #26341e); }
+#merlin-pilot button:focus-visible { outline: 3px solid #f6dda4; outline-offset: 4px; }
+#merlin-pilot button:disabled { opacity: .55; cursor: default; }
+#merlin-pilot [hidden] { display: none !important; }
+#merlin-pilot {
+  --frame-safe-corner: 50px;
+  --frame-safe-band: 16px;
+  --frame-underlay: linear-gradient(#16231ded, #131b17e8), url('../assets/relooking/pilot/wood-panel.webp');
+  --frame-underlay-position: center, center;
+  --frame-underlay-size: auto, 768px auto;
+  --frame-underlay-repeat: no-repeat, repeat;
+  --frame-underlay-origin: padding-box, padding-box;
+  --frame-underlay-clip: padding-box, padding-box;
+  width: min(1180px, calc(100vw - 32px));
+  height: min(740px, calc(100dvh - 32px));
+  max-width: none; max-height: none;
+  padding: 28px;
+  border: 1px solid #ad8a4d;
+  color: #edd8ae;
+  overflow: hidden;
+  box-shadow: 0 25px 100px #000c;
+}
+#merlin-pilot[open] { display: flex; flex-direction: column; }
+#merlin-pilot::backdrop { background: #060b08da; }
+#merlin-pilot .pilot-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex: 0 0 auto; border-bottom: 1px solid #8e7546; padding: 0 0 14px; font-family: 'Cinzel Decorative', Georgia, serif; font-size: 18px; }
+#merlin-pilot .pilot-header small { font-family: Georgia, serif; font-size: 13px; color: #b9a886; }
+#merlin-pilot .pilot-header button { flex-shrink: 0; }
+#merlin-pilot .pilot-scroll { min-height: 0; flex: 1; overflow-y: auto; overflow-x: hidden; scrollbar-color: #907443 #172019; }
+#merlin-pilot .pilot-scene { min-height: 100%; display: grid; grid-template-columns: 48% 52%; align-items: center; padding: 24px 4px 12px; }
+#merlin-pilot .pilot-character { margin: 0; position: relative; z-index: 1; min-width: 0; text-align: center; }
+#merlin-pilot .pilot-character img { display: block; width: 108%; height: auto; max-height: 510px; object-fit: contain; margin-left: -4%; transition: opacity 160ms ease; }
+#merlin-pilot .pilot-character img.pose-changing { opacity: 0; }
+#merlin-pilot .pilot-character figcaption { color: #c6b18a; font-size: 14px; font-style: italic; margin-top: 8px; }
+#merlin-pilot .pilot-parchment { position: relative; min-width: 0; padding: 32px 36px; color: #342817; border: 1px solid #b49a65; background: #e9d5a8 url('../assets/relooking/pilot/parchment-light.webp') center / 100% 100%; box-shadow: 0 8px 24px #0007; }
+#merlin-pilot .pilot-eyebrow { margin: 0 0 10px; font-size: 13px; letter-spacing: .06em; color: #66512f; }
+#merlin-pilot .pilot-parchment h2 { margin: 0 0 20px; font: 700 36px 'Cinzel Decorative', Georgia, serif; border-bottom: 1px solid #a28a55; padding-bottom: 14px; }
+#merlin-pilot #npc-speech { font-size: 19px; line-height: 1.65; }
+#merlin-pilot #npc-speech p { margin: 0 0 16px; }
+#merlin-pilot .pilot-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+#merlin-pilot .pilot-demo-note { font-size: 12px; color: #715c38; margin: 18px 0 0; }
+@media (max-width: 900px) {#merlin-pilot { padding: 24px; }
+#merlin-pilot .pilot-scene { grid-template-columns: 42% 58%; }
+#merlin-pilot .pilot-parchment { padding: 24px; }
+#merlin-pilot #npc-speech { font-size: 17px; }
+}
+@media (max-width: 600px) {#merlin-pilot { width: calc(100vw - 16px); height: calc(100dvh - 16px); padding: 22px 18px; --frame-safe-corner: 32px; --frame-safe-band: 12px; }
+#merlin-pilot .pilot-header { font-size: 13px; gap: 8px; padding-bottom: 12px; }
+#merlin-pilot .pilot-header small { display: block; font-size: 12px; margin-top: 4px; }
+#merlin-pilot .pilot-header button { padding: 10px 12px; font-size: 12px; }
+#merlin-pilot .pilot-scene { display: flex; flex-direction: column; padding: 16px 2px 10px; gap: 20px; }
+#merlin-pilot .pilot-character { width: 100%; }
+#merlin-pilot .pilot-character img { width: 100%; max-height: 290px; margin: 0; }
+#merlin-pilot .pilot-character figcaption { font-size: 12px; }
+#merlin-pilot .pilot-parchment { width: 100%; padding: 22px 20px; }
+#merlin-pilot .pilot-parchment h2 { font-size: 28px; margin-bottom: 14px; }
+#merlin-pilot #npc-speech { font-size: 17px; line-height: 1.6; }
+#merlin-pilot .pilot-actions button { flex: 1; padding: 10px 12px; }
+}
+@media (prefers-reduced-motion: reduce) {#merlin-pilot .pilot-character img { transition: none; } }
+
+@media (max-width: 430px) {#merlin-pilot .pilot-character img { width: 85%; max-height: 246.5px; margin-inline: auto; }
+#merlin-pilot .pilot-character figcaption { font-size: 14px; color: #dbc08b; line-height: 1.4; }
+#merlin-pilot .pilot-mobile-controls { flex: 0 0 auto; border-top: 1px solid #8e7546; padding-top: 12px; margin-top: 8px; }
+#merlin-pilot .pilot-mobile-controls .pilot-actions { margin: 0; gap: 12px; }
+#merlin-pilot .pilot-scroll { padding-bottom: 12px; scroll-padding-bottom: 12px; }
+}
+
+#merlin-pilot { font-family: Georgia, serif; --frame-corner-size: 50px; --frame-band-size: 16px; }
+#merlin-pilot:not(.realm-frame) { background-image: var(--frame-underlay); background-position: var(--frame-underlay-position); background-size: var(--frame-underlay-size); background-repeat: var(--frame-underlay-repeat); }
+@media (max-width: 600px) { #merlin-pilot { --frame-corner-size: 32px; --frame-band-size: 12px; } }
+@media (max-width: 430px) { #merlin-pilot { height: auto; max-height: calc(100dvh - 16px); } #merlin-pilot .pilot-scroll { flex: 0 1 auto; } #merlin-pilot .pilot-scene { min-height: 0; } }
+
+/* Sélecteur de test créé exclusivement sur localhost avec npcPreview=1. */
+#npc-dialogue-preview { margin: 1rem; padding: 1rem; border: 1px solid #9b7945; }
+#npc-dialogue-preview button { min-width: 44px; min-height: 44px; margin: 4px; }
+
+/* Neutraliser les valeurs génériques du jeu seulement dans ce composant. */
+#merlin-pilot { font-size:16px; line-height:normal; }
+#merlin-pilot button { width:auto; border-radius:0; font-weight:400; line-height:normal; text-shadow:none; letter-spacing:normal; }
+@media (max-width: 430px) { #merlin-pilot { inset-block: auto; top: 50%; margin-block: 0; transform: translateY(-50%); } }
