@@ -241,24 +241,6 @@ h3 { font-family: Georgia, 'Times New Roman', serif; font-weight: 400; overflow-
 body {
   background: radial-gradient(ellipse at 50% 0, #30362b, transparent 55%), linear-gradient(120deg, #161b15, var(--background) 50%, #1d1914);
 }
-.brand h1 { color: var(--text); text-shadow: 0 2px 0 #0008, 0 6px 18px #0003; }
-.brand .ornament {
-  display: inline-block;
-  width: 1.5rem;
-  height: 1.875rem;
-  font-size: 0;
-  background: var(--accent);
-  mask: var(--arvor-ermine) center / contain no-repeat;
-}
-.brand::after {
-  content: '';
-  display: block;
-  width: 7rem;
-  height: 3px;
-  margin: 1.5rem auto 0;
-  background: linear-gradient(90deg, transparent, var(--arvor-bronze), transparent) top / 100% 1px no-repeat,
-    linear-gradient(90deg, transparent, var(--arvor-bronze-soft), transparent) bottom / 80% 1px no-repeat;
-}
 /* B — Panneau : ardoise et bois sombre, lumière de tranche et feuillure. */
 .arvor-panel, .login, .confirmation-dialog {
   background: var(--arvor-panel-fill);

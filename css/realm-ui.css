@@ -13,12 +13,6 @@
 }
 body { background:radial-gradient(ellipse at 50% 0,#78532233,transparent 50%),linear-gradient(#0c110eeb,#0c110ef2),var(--realm-wood) center / 768px auto; }
 .welcome { padding-inline:clamp(.5rem,2vw,1.5rem); }
-.brand { position:relative; padding:1.8rem 1rem; margin-bottom:1.5rem; background:url('../assets/relooking/shared/lantern-banner.webp') center / auto 100% no-repeat; }
-.brand h1 { font-size:clamp(2.2rem,7vw,4.7rem); color:#f6dfac; letter-spacing:.1em; text-shadow:0 2px 3px #000,0 0 12px #000; }
-.brand .subtitle { color:#f3deb5; text-shadow:0 2px 3px #000; }
-.brand .introduction { color:#f4e3c1; text-shadow:0 2px 3px #000; }
-.brand::after { display:none; }
-.brand .ornament { filter:drop-shadow(0 2px 2px #000); }
 /* Même matériau pour tous les vrais panneaux ; aucune boîte décorative dans le DOM. */
 .realm-window, .login, dialog:not(:where(#market-dialog,.market-confirm)), dialog.confirmation-dialog:not(:where(#market-dialog,.market-confirm)) {
   background:var(--realm-wood-fill); border-color:var(--realm-gold);
@@ -123,8 +117,6 @@ table:not(:where(#market-dialog *)) { border-collapse:collapse; color:var(--real
 table:not(:where(#market-dialog *)) :is(th,td) { padding:.65rem; border-bottom:1px solid #97734466; }
 @media(max-width:900px) { #player-screen > dl.stats { grid-template-columns:repeat(2,minmax(0,1fr)); } }
 @media(max-width:540px) {
-  .brand { padding:1rem .5rem; background-size:auto 100%; }
-  .brand .introduction { font-size:.75rem; }
   #player-screen > dl.stats { gap:.45rem; }
   #player-screen > dl.stats > div { padding:.65rem; }
   dialog:not(:where(#market-dialog,.market-confirm)) { border-image-width:8px; }

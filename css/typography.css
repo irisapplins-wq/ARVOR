@@ -38,9 +38,6 @@
 /* Sélection explicite : les corps de texte, messages, valeurs et saisies
    n'héritent jamais de la police décorative. */
 :root { --realm-display-font: 'Cinzel Decorative', Georgia, 'Times New Roman', serif; }
-.brand h1, .brand .subtitle { font-family: var(--realm-display-font); font-weight: 400; }
-.brand h1 { letter-spacing: .06em; padding-left: .06em; }
-.brand .subtitle { letter-spacing: 0; }
 :is(#login-title, #player-welcome, #domain-name, #domain-view-title,
     #armorique-title, #buildings-title, #army-title, #inventory-title,
     #quest-title, #quest-npc-title, #tavern-title, #messaging-title,
@@ -92,7 +89,6 @@
 .quest-tabs button { flex-basis: auto; }
 /* Inscriptions secondaires : seuls les libellés reçoivent Cinzel 400.
    Les valeurs, champs, descriptions et badges de quantité restent inchangés. */
-.brand .introduction,
 .typography-label,
 #expedition-content .expedition-eyebrow,
 #expedition-content .expedition-section-title,

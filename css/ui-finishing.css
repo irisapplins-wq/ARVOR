@@ -1,41 +1,11 @@
 /* Finitions visuelles uniquement : aucun état de jeu ni événement remplacé. */
 .brand {
-  box-sizing: border-box;
   width: min(100%, 900px);
-  aspect-ratio: 3 / 1;
   padding: 0;
-  margin-inline: auto;
-  container-type: inline-size;
-  background-size: 100% auto;
-  background-position: top center;
+  margin: 0 auto 1.5rem;
+  background: none;
 }
-.brand .ornament { display: none; }
-.brand h1, .brand .subtitle, .brand .introduction {
-  position: absolute;
-  left: 0;
-  width: 100%;
-  box-sizing: border-box;
-  margin: 0;
-  text-align: center;
-}
-.brand h1 {
-  top: 43%;
-  transform: translateY(-50%);
-  font-size: clamp(1.4rem, 8.4cqw, 4.7rem);
-  line-height: .9;
-  padding-left: .1em;
-}
-.brand .subtitle {
-  top: 62%;
-  transform: translateY(-50%);
-  font-size: clamp(.72rem, 2.3cqw, 1.25rem);
-  line-height: 1.1;
-}
-.brand .introduction {
-  top: 88%;
-  font-size: clamp(.6rem, 2.1cqw, .875rem);
-  line-height: 1.1;
-}
+.brand-image { display: block; width: 100%; height: auto; object-fit: contain; }
 
 :is(#armorique-domain-choice, #armorique-location-choice, #armorique-frontier-choice) {
   appearance: none;
@@ -93,4 +63,3 @@
 .army-card[data-unit-type='archer']::before { background-image: url('../assets/units/archer.webp'); }
 .army-card[data-unit-type='infantry']::before { background-image: url('../assets/units/fantassin.webp'); }
 .army-card[data-unit-type='scout']::before { background-image: url('../assets/units/eclaireur.webp'); }
-@media (max-width: 540px) { .brand { padding: 0; } }
