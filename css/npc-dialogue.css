@@ -80,3 +80,6 @@
 #merlin-pilot { font-size:16px; line-height:normal; }
 #merlin-pilot button { width:auto; border-radius:0; font-weight:400; line-height:normal; text-shadow:none; letter-spacing:normal; }
 @media (max-width: 430px) { #merlin-pilot { inset-block: auto; top: 50%; margin-block: 0; transform: translateY(-50%); } }
+@media (max-width: 430px) {
+  #merlin-pilot .pilot-mobile-controls .pilot-actions:has([data-extra-response]) #pilot-close { flex-basis: 100%; }
+}

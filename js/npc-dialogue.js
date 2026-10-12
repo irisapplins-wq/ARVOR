@@ -37,7 +37,10 @@
       if (!config || !config.id || !config.nodes?.[config.initial]) throw Error('Configuration de dialogue invalide.');
       for (const node of Object.values(config.nodes)) {
         if (!config.portraits?.[node.pose] || !Array.isArray(node.paragraphs)) throw Error('Pose ou texte absent.');
-        for (const answer of node.responses || []) if (!config.nodes[answer.next]) throw Error('Dialogue suivant absent.');
+        for (const answer of node.responses || []) {
+          if (answer.next && !config.nodes[answer.next]) throw Error('Dialogue suivant absent.');
+          if (!answer.next && !answer.close && !(answer.action && typeof config.onResponse === 'function')) throw Error('Réponse invalide.');
+        }
       }
     }
     async function render(animate) {
@@ -69,7 +72,7 @@
       for (const answer of responses.slice(1)) {
         const button = Object.assign(document.createElement('button'), { type: 'button', textContent: answer.label });
         button.dataset.extraResponse = answer.next;
-        button.addEventListener('click', () => go(answer.next)); close.before(button);
+        button.addEventListener('click', () => respond(answer)); close.before(button);
       }
       actions.querySelectorAll('button').forEach(b => b.disabled = false); busy = false;
     }
@@ -77,12 +80,33 @@
       if (busy || !dialog.open || !character.nodes[target]) return;
       nodeId = target; render(true);
     }
+    async function respond(answer) {
+      if (busy || !dialog.open) return;
+      if (answer.close) { dialog.close(); return; }
+      if (answer.next && !answer.action) { go(answer.next); return; }
+      const current = revision;
+      busy = true; actions.querySelectorAll('button').forEach(b => b.disabled = b !== close);
+      speech.querySelector('[data-dialogue-error]')?.remove();
+      try {
+        const result = await character.onResponse(answer.action, answer);
+        if (current !== revision || !dialog.open) return;
+        busy = false;
+        if (result?.close) dialog.close();
+        else if (result?.next) go(result.next);
+      } catch (error) {
+        if (current !== revision || !dialog.open) return;
+        const message = Object.assign(document.createElement('p'), { textContent: error.message || 'Action indisponible. Réessayez.' });
+        message.dataset.dialogueError = ''; message.setAttribute('role', 'alert'); speech.append(message);
+      } finally {
+        if (current === revision) { busy = false; actions.querySelectorAll('button').forEach(b => b.disabled = false); }
+      }
+    }
     next.addEventListener('click', () => {
       const answer = character?.nodes[nodeId]?.responses?.[0];
-      if (answer) go(answer.next);
+      if (answer) respond(answer);
     });
     for (const button of [close, el('pilot-close-top')]) button.addEventListener('click', () => dialog.close());
-    dialog.addEventListener('close', () => { revision++; busy = false; opener?.focus({ preventScroll: true }); });
+    dialog.addEventListener('close', () => { revision++; busy = false; opener?.focus({ preventScroll: true }); character?.onClose?.(); });
     return Object.freeze({
       async open(config, trigger) {
         validate(config);
@@ -93,6 +117,8 @@
         character = config; nodeId = config.initial; opener = trigger || document.activeElement;
         el('npc-name').textContent = config.name; el('npc-subtitle').textContent = config.subtitle;
         close.textContent = config.closeLabel || 'Fermer';
+        dialog.querySelector('.pilot-demo-note').textContent = config.note || 'Dialogue démonstratif · Aucun effet sur votre partie';
+        dialog.querySelector('.pilot-header small').textContent = config.headerLabel || '· Prévisualisation';
         portrait.classList.remove('pose-changing');
         if (!dialog.open) dialog.showModal();
         scroll.scrollTop = 0;

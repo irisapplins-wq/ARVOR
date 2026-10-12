@@ -10,6 +10,12 @@
       const existing = document.querySelector('dialog[open]');
       if (existing && existing.id !== 'merlin-pilot') { reason = 'MODAL_ALREADY_OPEN'; return false; }
       const config = structuredClone(base);
+      if (options.nodes) config.nodes = structuredClone(options.nodes);
+      if (options.title !== undefined) config.title = options.title;
+      config.onResponse = options.onResponse;
+      config.onClose = options.onClose;
+      config.note = options.note;
+      config.headerLabel = options.headerLabel;
       const step = options.step || config.initial;
       if (!config.nodes[step]) { reason = 'STEP_UNKNOWN'; return false; }
       config.initial = step;

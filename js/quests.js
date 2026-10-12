@@ -5,9 +5,13 @@
   if (!journal || !npcDialog) return;
   const access = el('show-quests'), notice = el('quest-notice'), npcNotice = el('quest-npc-notice');
   let user = null, epoch = 0, list = [], enabled = false, selected = null, tab = 'AVAILABLE';
+  let storyActive = false;
   let busy = false, pending = null, confirmation = null, npc = null, opener = null, dialogueEpoch = 0;
   const labels = { LOCKED:'Verrouillée', AVAILABLE:'Disponible', ACTIVE:'En cours', READY_TO_TURN_IN:'Prête à remettre', COMPLETED:'Terminée' };
   const item = id => window.ARVORQuestItems?.items.find(x => x.id === id);
+  const characters = {merlin_guide:'merlin',tavernier:'tavernier',forgeron:'forgeron',herboriste:'herboriste'};
+  const npcNames = {merlin_guide:'Merlin',tavernier:'le tavernier',forgeron:'le forgeron',herboriste:'l’herboriste'};
+  let storyRevision = 0;
   let rewardCatalog;
   function loadRewardCatalog() {
     rewardCatalog ||= fetch('js/item-catalog.json').then(r => { if (!r.ok) throw Error('Catalogue indisponible'); return r.json(); }).then(c => c.items).catch(() => []);
@@ -51,14 +55,14 @@
   function renderDetails() {
     const box = el('quest-details'); box.replaceChildren(); const q = selected;
     if (!q) { box.append(node('p', enabled ? 'Choisissez un récit pour consulter ses objectifs.' : 'Les dialogues, objectifs et récompenses seront accessibles à l’ouverture des quêtes.')); return; }
-    box.append(node('p', q.type === 'principale' ? 'Quête principale' : 'Quête secondaire', 'inventory-kicker'), node('h3', q.title), node('p', q.description), node('p', labels[q.state], 'quest-state'));
+    box.append(node('p', q.type === 'principale' ? 'Quête principale' : 'Quête secondaire', 'inventory-kicker'), node('h3', q.title), ...(q.chapter ? [node('p', q.chapter, 'inventory-kicker')] : []), node('p', q.description), node('p', labels[q.state], 'quest-state'));
     const objectives = node('ol'); for (const o of q.objectives) objectives.append(node('li', (o.done ? '✓ ' : '○ ') + o.label, o.done ? 'quest-done' : '')); box.append(objectives);
-    box.append(node('h4','Récompense'), node('p',rewardText(q)));
+    box.append(node('h4','Récompense garantie'), node('p',rewardText(q)));
     if (q.reward_state === 'PENDING') box.append(node('p','Récompense conservée en attente : libérez de la place dans votre stockage ou votre inventaire.'));
     const actions = node('div',undefined,'quest-actions');
     if (q.state !== 'LOCKED') {
       const ids = new Set([q.giver, q.recipient]); for (const o of q.objectives) if (o.npc_id) ids.add(o.npc_id);
-      for (const id of ids) actions.append(button(id === 'tavernier' ? 'Parler au tavernier' : 'Parler à ' + (id === 'merlin_guide' ? 'Merlin' : id), () => openNPC(q.id,id)));
+      for (const id of ids) actions.append(button(id === 'tavernier' ? 'Parler au tavernier' : id === 'forgeron' ? 'Parler au forgeron' : 'Parler à ' + (npcNames[id] || id), () => openQuestNPC(q,id)));
       if (q.state === 'ACTIVE') actions.append(button('Vérifier ma progression', () => act(q.id,'SYNC',null)));
       if (q.reward_state === 'PENDING') actions.append(button('Recevoir la récompense', () => ask(q,'CLAIM_REWARD',null,'Recevoir la récompense conservée par le serveur ?')));
     }
@@ -88,10 +92,12 @@
       if (e !== epoch || who !== user) return; valid(data); pending = null;
       notice.textContent = npcNotice.textContent = 'Progression enregistrée par le serveur.';
       await Promise.allSettled([window.arvor.inventory?.refresh(who), window.arvor.refreshAfterQuest?.(who)]);
+      return true;
     } catch (error) {
       if (e !== epoch) return; notice.textContent = npcNotice.textContent = errorText(error);
       // Un refus métier est définitif ; une panne de transport conserve le même UUID.
       if (String(error?.message || '').includes('ARVOR_')) pending = null;
+      return false;
     } finally {
       if (e === epoch) { busy = false; confirmation = null; render(); if (npcDialog.open && npc) await loadNPC(questId,npc); else if (npcDialog.open) npcDialog.close(); }
     }
@@ -116,6 +122,64 @@
       if (pending && !busy && pending.questId === questId) box.append(button('Réessayer la même requête', () => act(pending.questId,pending.action,pending.npcId)));
     } catch (error) { if (e === epoch && de === dialogueEpoch) npcNotice.textContent = errorText(error); }
   }
+  async function openQuestNPC(q,npcId) {
+    if (busy || !user || !enabled || storyActive) return;
+    const e = epoch;
+    busy = true; render(); notice.textContent = 'Lecture du dialogue…';
+    let dialogue;
+    try { dialogue = await rpc('get_quest_dialogue', {p_quest_id:q.id,p_npc_id:npcId}); }
+    catch (error) { notice.textContent = errorText(error); }
+    finally { if (e === epoch) { busy = false; render(); } }
+    if (e !== epoch || !dialogue) return;
+    const presentation = dialogue.presentation;
+    // Compatibilité avec la première fiche illustrée : aucun identifiant de quête codé ici.
+    const legacy = Array.isArray(presentation?.pages) && q.giver === npcId;
+    const config = presentation?.npcs?.[npcId] || (legacy ? {
+      title:presentation.title, pages:presentation.pages,
+      states:{AVAILABLE:'greeting',ACTIVE:'accepted',READY_TO_TURN_IN:'accepted'}
+    } : null);
+    const character = characters[npcId];
+    const state = dialogue.state;
+    if (!config || !config.states?.[state] || !character) { await openNPC(q.id,npcId); return; }
+    const nodes = Object.fromEntries(config.pages.map(page => [page.id, page]));
+    const revision = ++storyRevision;
+    journal.close(); storyActive = true;
+    const current = () => e === epoch && revision === storyRevision && storyActive && user;
+    const opened = await window.arvor.npcDialogue.open(character, {
+      step:config.states[state], nodes, title:config.title || presentation.title || q.title,
+      trigger:access, headerLabel:q.chapter || '',
+      note:'Progression et récompense vérifiées côté serveur.',
+      onResponse: async (action,answer) => {
+        if (!current()) throw Error('Reconnectez-vous ou rouvrez le dialogue pour poursuivre.');
+        if (!['TALK','ACCEPT','SYNC','DELIVER','COMPLETE','CLAIM_REWARD'].includes(action)) throw Error('Action indisponible.');
+        const run = async (a,n) => {
+          if (!current()) throw Error('Dialogue fermé. Rouvrez la rencontre pour poursuivre.');
+          if (!await act(q.id,a,n)) throw Error(notice.textContent);
+          if (!current()) throw Error('Dialogue fermé. La progression sera relue à la réouverture.');
+        };
+        if (pending) {
+          if (pending.questId !== q.id) throw Error('Réessayez d’abord la requête incertaine dans son journal.');
+          await run(pending.action,pending.npcId);
+        }
+        let quest = list.find(x => x.id === q.id);
+        if (action === 'ACCEPT') {
+          if (quest?.state === 'AVAILABLE') { await run('TALK',npcId); await run('ACCEPT',npcId); }
+        } else if (action === 'COMPLETE') {
+          if (quest?.state === 'ACTIVE') await run('TALK',npcId);
+          quest = list.find(x => x.id === q.id);
+          if (quest?.state !== 'COMPLETED') await run('COMPLETE',npcId);
+        } else {
+          if (action === 'DELIVER' && !window.confirm('Remettre l’objet demandé ? Il sera retiré de votre inventaire après validation serveur.')) return {next:config.states[quest?.state]};
+          await run(action,['SYNC','CLAIM_REWARD'].includes(action) ? null : npcId);
+        }
+        quest = list.find(x => x.id === q.id);
+        if (quest?.state === 'COMPLETED' && !config.states.COMPLETED) return {close:true};
+        return answer?.next ? {next:answer.next} : config.states[quest?.state] ? {next:config.states[quest.state]} : {close:true};
+      },
+      onClose: () => { if (revision !== storyRevision) return; storyActive = false; storyRevision++; if (e === epoch && user) { journal.showModal(); void refresh(); } }
+    });
+    if (!opened && revision === storyRevision) { storyActive = false; storyRevision++; if (e === epoch && user) { journal.showModal(); notice.textContent = 'Dialogue indisponible : vérifiez les pages et les illustrations.'; } }
+  }
   async function openNPC(id,npcId) { if (busy || !user || !enabled) return; npc = npcId; confirmation = null; el('quest-confirmation').hidden = true; npcNotice.textContent = ''; npcDialog.showModal(); await loadNPC(id,npcId); }
   access.addEventListener('click', () => { if (!user) return; opener = document.activeElement; tab = 'AVAILABLE'; selected = null; journal.showModal(); refresh(); });
   el('quest-close').addEventListener('click', () => journal.close());
@@ -127,5 +191,5 @@
   el('quest-refresh').addEventListener('click', refresh);
   for (const b of journal.querySelectorAll('[data-quest-tab]')) b.addEventListener('click', () => { tab = b.dataset.questTab; selected = null; render(); });
   window.arvor ||= {};
-  window.arvor.quests = Object.freeze({setUser(id) { user = id || null; epoch++; busy = false; enabled = false; list = []; selected = null; pending = null; confirmation = null; npc = null; if (npcDialog.open) npcDialog.close(); if (journal.open) journal.close(); access.disabled = !user; render(); }});
+  window.arvor.quests = Object.freeze({setUser(id) { user = id || null; epoch++; if (storyActive) { window.arvor.npcDialogue?.close(); storyActive = false; } busy = false; enabled = false; list = []; selected = null; pending = null; confirmation = null; npc = null; if (npcDialog.open) npcDialog.close(); if (journal.open) journal.close(); access.disabled = !user; render(); }});
 })();
