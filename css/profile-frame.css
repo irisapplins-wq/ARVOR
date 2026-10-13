@@ -48,10 +48,46 @@
 #player-profile-dialog .profile-frame-bl { bottom: 0; left: 0; background-position: bottom left; background-image: url('../assets/relooking/profile-frame/corner-bottom-left.webp'); }
 #player-profile-dialog .profile-frame-br { bottom: 0; right: 0; background-position: bottom right; background-image: url('../assets/relooking/profile-frame/corner-bottom-right.webp'); }
 #player-profile-dialog::after { content: none; }
+/* Présentation du profil uniquement : cadre et matériaux existants conservés. */
+#player-profile-dialog .social-dialog-header { align-items:center; gap:.8rem; padding:.2rem 0 .85rem; border-bottom:1px solid #9b794566; }
+#player-profile-dialog .social-dialog-header h2 { font-size:clamp(1.2rem,2.5vw,1.6rem); line-height:1.4; }
+#player-profile-dialog .social-own-profile { margin:.9rem 0 .35rem; min-height:44px; }
+#player-profile-dialog .social-profile-details { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.85rem 1.2rem; padding:1.3rem; margin:.65rem 0; }
+#player-profile-dialog .social-profile-details > :where(div) { display:block; min-width:0; padding:0; border:0; }
+#player-profile-dialog .social-profile-details dt { color:#705126; font-family:var(--realm-display-font); font-size:.85rem; line-height:1.5; }
+#player-profile-dialog .social-profile-details dd { margin:.3rem 0 0; line-height:1.4; }
+#player-profile-dialog .social-profile-identity { grid-column:1/-1; text-align:center; }
+#player-profile-dialog .social-profile-identity dt { text-transform:none; letter-spacing:.06em; }
+#player-profile-dialog .social-profile-name { font-size:clamp(1.6rem,3.5vw,2.15rem); line-height:1.35; font-weight:700; }
+#player-profile-dialog .social-profile-public-title { font-size:.9rem; margin-top:.35rem; }
+#player-profile-dialog .social-profile-identity::after { content:'✦'; display:block; width:5rem; margin:.65rem auto 0; color:#8e6838; background:linear-gradient(90deg,#92703b70,transparent 40%,transparent 60%,#92703b70) center/100% 1px no-repeat; }
+#player-profile-dialog .social-profile-domain { grid-column:1/-1; margin:0; text-align:center; padding:0 0 .8rem; border-bottom:1px solid #92703b66; background:none; }
+#player-profile-dialog .social-profile-domain dd { font-family:var(--realm-display-font); font-size:clamp(1.1rem,2.8vw,1.4rem); font-weight:400; }
+#player-profile-dialog .social-profile-stage, #player-profile-dialog .social-profile-power { align-self:stretch; text-align:center; padding:.6rem .3rem; }
+#player-profile-dialog .social-profile-power { border-left:1px solid #92703b66; }
+#player-profile-dialog #public-stage { font-size:1.05rem; }
+#player-profile-dialog #public-power { font-size:1.9rem; font-weight:700; font-variant-numeric:tabular-nums; color:#533918; }
+#player-profile-dialog #public-joined { margin:.8rem 0 1.25rem; text-align:center; line-height:1.6; }
+#player-profile-dialog .social-search { padding-top:1.1rem; margin-top:1.2rem; border-top:3px double #9b794566; }
+#player-profile-dialog .social-search h3 { margin:0 0 .9rem; font-size:clamp(1rem,2.5vw,1.25rem); line-height:1.5; }
+#player-profile-dialog #player-search-form label { display:block; margin-bottom:.35rem; }
+#player-profile-dialog .social-search-controls { align-items:stretch; gap:.65rem; }
+#player-profile-dialog .social-search-controls :is(input,button), #player-profile-dialog .social-search-results button { min-height:44px; }
+#player-profile-dialog .social-search-controls input { padding:.6rem .75rem; border:1px solid #9b7945; background:#161911; color:#f0e1c4; }
+#player-profile-dialog #player-search-help { margin:.65rem 0; font-size:.8rem; line-height:1.6; }
+#player-profile-dialog .social-search-results { gap:.6rem; margin:.8rem 0 .2rem; }
+#player-profile-dialog .social-search-results button { padding:.65rem .85rem; }
 @media (max-width: 540px) {
   #player-profile-dialog {
     --profile-corner: 36px;
     --profile-band: 12px;
     --profile-inset: 40px;
   }
+  #player-profile-dialog .social-dialog-header { gap:.5rem; }
+  #player-profile-dialog .social-dialog-header h2 { font-size:1.05rem; }
+  #player-profile-dialog .social-profile-details { padding:.85rem; gap:.7rem .6rem; }
+  #player-profile-dialog .social-profile-details dt { font-size:.78rem; }
+  #player-profile-dialog .social-profile-name { font-size:1.5rem; }
+  #player-profile-dialog #public-power { font-size:1.6rem; }
+  #player-profile-dialog .social-search-controls { grid-template-columns:minmax(0,1fr); }
 }
