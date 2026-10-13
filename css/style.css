@@ -702,7 +702,9 @@ input:focus-visible, button:focus-visible { outline: 2px solid var(--arvor-focus
 
 /* Domaines étrangers connus : couche de consultation sans action militaire. */
 .armorique-world-domains { position:absolute; inset:0; z-index:2; pointer-events:none; }
-.armorique-foreign-domain { position:absolute; transform:translate(-50%,-100%); pointer-events:auto; width:44px; min-height:44px; margin:0; padding:.25rem; font-size:1.5rem; background:var(--arvor-panel-fill); color:var(--text); border:1px solid var(--arvor-bronze); }
+.armorique-foreign-domain { position:absolute; transform:translate(-50%,-100%) scale(.5); transform-origin:50% 100%; pointer-events:auto; width:44px; min-height:44px; margin:0; padding:.25rem; font-size:1.5rem; background:var(--arvor-panel-fill); color:var(--text); border:1px solid var(--arvor-bronze); }
+/* Le dessin est réduit ; la zone transparente conserve une cible tactile confortable. */
+.armorique-foreign-domain::before { content:''; position:absolute; left:50%; top:calc(100% + 1px); width:calc(200% + 4px); height:calc(200% + 4px); transform:translate(-50%,-100%); }
 .world-domain-dialog { width:min(26rem,calc(100% - 2rem)); overflow:auto; background:var(--arvor-panel-fill); }
 .raid-dialog { width:min(42rem,calc(100vw - 1rem)); max-height:calc(100dvh - 1rem); overflow:auto; padding:1rem; }
 .raid-header { display:flex; align-items:center; justify-content:space-between; gap:1rem; position:sticky; top:0; z-index:1; background:var(--arvor-panel-fill); padding:.5rem 0; }
