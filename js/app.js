@@ -992,6 +992,54 @@
     showExpeditionDialog('location-prepare', focus);
     queueLocationPreparation();
   }
+  // Pont d'interface uniquement : le code d'un marqueur ne constitue jamais une autorisation E2.
+  async function inspectQuestExpedition(code) {
+    const id = userId, gen = generation;
+    const blocked = message => ({ canPrepare: false, message });
+    if (!id || !domainId) return blocked('Reconnectez-vous pour préparer une expédition.');
+    if (loading || busy || militaryChanging || populationRefreshing || expeditionSending || locationConfirming)
+      return blocked('Une opération est en cours. Réessayez dans un instant.');
+    if (locationUncertain() || locationStorageError)
+      return blocked('Un départ précédent doit être vérifié. Consultez le suivi des expéditions avant un nouveau départ.');
+    try {
+      const [known, targets] = await Promise.all([
+        supabase.rpc('get_my_discovered_locations'), supabase.rpc('get_my_location_expedition_targets')
+      ]);
+      if (id !== userId || gen !== generation) return blocked('Votre session a changé. Rouvrez le lieu.');
+      if (known.error || targets.error || !Array.isArray(known.data) || !Array.isArray(targets.data)) throw Error('reads');
+      const location = known.data.find(l => l.code === code);
+      if (!location) return blocked('Ce lieu n’est pas encore découvert. Explorez sa cellule avant d’y envoyer une expédition.');
+      const target = targets.data.find(l => l.code === code);
+      if (!target) return blocked('Ce lieu ne figure pas parmi vos destinations E2 autorisées. Il est actuellement indisponible pour une expédition.');
+      if (!uuidPattern.test(target.location_id) || typeof location.name !== 'string' ||
+          typeof location.location_type !== 'string' || ![1, 2, 3].includes(location.danger_level)) throw Error('target');
+      const { data, error } = await supabase.rpc('get_location_expedition_preparation', {
+        p_location_id: target.location_id, p_infantry_qty: 0, p_archer_qty: 0, p_scout_qty: 1
+      });
+      if (id !== userId || gen !== generation) return blocked('Votre session a changé. Rouvrez le lieu.');
+      if (error || data?.location_id !== target.location_id || typeof data.can_start !== 'boolean' ||
+          !locationUnits.every(u => Number.isSafeInteger(data.available?.[u.key]) && data.available[u.key] >= 0)) throw Error('preparation');
+      if (!data.can_start) return blocked(locationBlockingText(data));
+      return { canPrepare: true, message: 'Choisissez vos troupes dans la préparation E2. Le serveur vérifiera de nouveau les conditions au départ.', location, location_id: target.location_id };
+    } catch {
+      return blocked('Impossible de vérifier les conditions de cette expédition. Réessayez dans un instant.');
+    }
+  }
+  window.arvor.questExpeditions = Object.freeze({
+    inspect: inspectQuestExpedition,
+    async prepare(code, focus, canOpen = () => true) {
+      const id = userId, gen = generation;
+      await synchronizeExpedition();
+      if (id !== userId || gen !== generation || !canOpen()) return { canPrepare: false, message: 'La préparation a été fermée. Rouvrez le lieu.' };
+      const result = await inspectQuestExpedition(code);
+      if (!result.canPrepare) return result;
+      if (!canOpen()) return { canPrepare: false, message: 'La préparation a été fermée. Rouvrez le lieu.' };
+      if (!expeditionReady || expeditionActive()) return { canPrepare: false, message: expeditionActive() ? 'Une mission est déjà active. Consultez le suivi des expéditions.' : 'Le suivi des expéditions est indisponible. Réessayez dans un instant.' };
+      locationTargets.set(code, result.location_id);
+      openLocationPreparation(result.location, focus);
+      return { ...result, opened: expeditionDialog.open && expeditionPanelMode === 'location-prepare' && locationSelected?.code === code };
+    }
+  });
   function locationBlockingText(p) {
     const labels = {
       EXPEDITION_ACTIVE: 'Une mission est déjà active.',

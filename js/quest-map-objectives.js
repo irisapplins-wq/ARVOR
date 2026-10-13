@@ -6,15 +6,41 @@
   const layer=document.createElement('div'); layer.className='quest-map-objectives'; map.parentElement.append(layer);
   const panel=document.createElement('div'); panel.className='armorique-location-panel'; panel.hidden=true; view.append(panel);
   const notice=document.createElement('p'); notice.className='quest-map-objective-notice'; view.append(notice);
-  let user=null, revision=0, busy=false, timer=null;
-  function clear() { layer.replaceChildren(); panel.replaceChildren(); panel.hidden=true; }
+  let user=null, revision=0, busy=false, timer=null, panelRevision=0;
+  function clear() { panelRevision++; layer.replaceChildren(); panel.replaceChildren(); panel.hidden=true; }
   function visible() { return user && !view.hidden && !document.hidden; }
   function show(location,opener,kind) {
+    const pr=++panelRevision, rev=revision;
+    const current=()=>pr===panelRevision && rev===revision && !panel.hidden && user;
     panel.replaceChildren(); const title=document.createElement('h4'); title.textContent=kind==='FIND_ITEM'?'Expédition de quête : '+location.name:location.name;
     const text=document.createElement('p'); text.textContent=kind==='FIND_ITEM'?'Rapportez l’objet demandé au cours d’une expédition E2 victorieuse.':'Objectif de quête';
     const close=document.createElement('button'); close.type='button'; close.textContent='Fermer';
-    close.onclick=()=>{panel.hidden=true;opener.focus({preventScroll:true});};
-    panel.append(title,text,close); panel.hidden=false; close.focus({preventScroll:true});
+    close.onclick=()=>{panelRevision++;panel.hidden=true;opener.focus({preventScroll:true});};
+    panel.append(title,text);
+    if (kind==='FIND_ITEM') {
+      const status=document.createElement('p'); status.textContent='Vérification des conditions d’expédition…'; status.setAttribute('role','status');
+      const prepare=document.createElement('button'); prepare.type='button'; prepare.textContent='Préparer l’expédition'; prepare.hidden=true;
+      let sending=false;
+      const inspect=async()=>{
+        try {
+          const api=window.arvor?.questExpeditions;
+          if (!api) throw Error('Préparation indisponible');
+          const result=await api.inspect(location.code); if (!current()) return;
+          status.textContent=result.message; prepare.hidden=!result.canPrepare;
+        } catch { if(current())status.textContent='La préparation des expéditions est indisponible. Réessayez dans un instant.'; }
+      };
+      prepare.onclick=async()=>{
+        if (sending || !current()) return; sending=true; prepare.disabled=true; status.textContent='Vérification du lieu et ouverture de la préparation…';
+        try {
+          const result=await window.arvor.questExpeditions.prepare(location.code,opener,current); if(!current())return;
+          if(result.opened){panelRevision++;panel.hidden=true;}
+          else {status.textContent=result.message || 'La préparation est indisponible. Réessayez.';prepare.hidden=!result.canPrepare;}
+        } catch {if(current())status.textContent='La préparation est indisponible. Aucun départ n’a été envoyé.';}
+        finally {sending=false;if(current())prepare.disabled=false;}
+      };
+      panel.append(status,prepare); void inspect();
+    }
+    panel.append(close); panel.hidden=false; close.focus({preventScroll:true});
   }
   async function refresh() {
     if (!visible() || busy) return;
@@ -56,7 +82,7 @@
       if (rev===revision) { clear(); notice.textContent='Les repères de quête sont momentanément indisponibles.'; }
     } finally { if (rev===revision) busy=false; }
   }
-  document.addEventListener('keydown',e=>{if(e.key==='Escape')panel.hidden=true;});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'){panelRevision++;panel.hidden=true;}});
   document.addEventListener('visibilitychange',()=>void refresh());
   window.arvor ||= {};
   window.arvor.questMap=Object.freeze({refresh,setUser(id){revision++;user=id||null;busy=false;clear();notice.textContent='';clearInterval(timer);timer=user?setInterval(()=>void refresh(),15000):null;}});
