@@ -94,7 +94,7 @@
     }
   }
   function resourceImage(resource) {
-    const image = node('img'); image.src = 'assets/market/' + resource + '.svg'; image.alt = ''; image.className = 'market-resource-image'; return image;
+    const image = node('img'); image.src = 'assets/ui/dashboard-icons/' + resource + '.webp'; image.alt = ''; image.className = 'market-resource-image'; return image;
   }
   function resourceHeading(resource, detail) {
     const heading = node('div', undefined, 'market-resource-heading');
@@ -106,7 +106,7 @@
   }
   function saleIllustration() {
     const resource = el('market-resource').value;
-    el('market-sell-image').src = 'assets/market/' + resource + '.svg'; el('market-sell-image').alt = names[resource]; el('market-sell-name').textContent = names[resource];
+    el('market-sell-image').src = 'assets/ui/dashboard-icons/' + resource + '.webp'; el('market-sell-image').alt = names[resource]; el('market-sell-name').textContent = names[resource];
   }
   function renderBoard() {
     const container = el('market-board'); container.replaceChildren();

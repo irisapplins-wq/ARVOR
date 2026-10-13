@@ -53,6 +53,7 @@
 }
 #market-dialog .market-resource-heading { border-bottom:1px solid #78573366; }
 #market-dialog .market-resource-image { filter:drop-shadow(0 3px 2px #3b230b40); }
+#market-dialog #market-sell-image { object-fit:contain; }
 #market-dialog .market-card > button {
   color:#fff0c9; background:linear-gradient(#304427,#152918); border-color:#735829;
   box-shadow:inset 0 0 0 2px #172415,inset 0 0 0 3px #a1884f,0 3px 5px #472f1740;
